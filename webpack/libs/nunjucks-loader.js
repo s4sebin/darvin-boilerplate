@@ -10,7 +10,6 @@ const path = require('path');
 const nunjucks = require('nunjucks');
 
 const NunjucksLoader = nunjucks.Loader.extend({
-  // Based off of the Nunjucks 'FileSystemLoader'
   init(searchPaths, sourceFoundCallback) {
     this.sourceFoundCallback = sourceFoundCallback;
 
@@ -59,8 +58,6 @@ module.exports = function(content) {
   // const loaderFilename = this.resourcePath.replace(/^.*[\\\/]/, '');
   const loaderPath = this.resourcePath.split('src/templates/')[1];
   const loaderPathRel = loaderPath.substring(0, loaderPath.lastIndexOf("/"));
-  const moduleType = loaderPath.split('/')[0];
-  const moduleName = loaderPath.replace(/^.*[\\\/]/, '').split('.')[0];
 
   const callback = this.async();
   const opt = utils.parseQuery(this.query);

@@ -13,14 +13,15 @@ const { parseFile } = require('nunjucks-parser');
 
 const webpackEntryObj = {};
 
-let modules = [],
-    components = [],
-    pages = [],
-    webpackEntryDefault = ['./src/js/base.js'],
+let webpackEntryDefault = ['./src/js/base.js'],
     webpackEntryDefaultPreview = ['./src/js/base.js', './src/js/preview.js'],
     activityDays = 20,
     endDate = new Date(),
     startDate = new Date(endDate.getTime() - (activityDays * 24 * 60 * 60 * 1000)),
+    getDirs = p => fs.readdirSync(p).filter(f => fs.statSync(path.join(p, f)).isDirectory()),
+    modules = getDirs(`./src/templates/modules`),
+    components = getDirs(`./src/templates/components`),
+    pages = getDirs(`./src/templates/pages`),
     filterCommitsInDateRange = (startDate, endDate, commitsArr) => {
       let retArr = [];
       let commitsArrDate = commitsArr.map(item => ( new Date(item.date.split(' ')[0]) ));
@@ -36,25 +37,48 @@ let modules = [],
       }
 
       return retArr;
+    },
+    prepareDependencies = async (mod) => {
+      let env = nunjucks.configure(`./src/templates`);
+      let {dependencies} = await parseFile(env, `modules/${mod}/${mod}.njk`);
+      let removeIndex = 0;
+      let obj = {
+        dependencies: dependencies
+      }
+
+      dependencies.forEach((dependency, i) => {
+        for (var key in dependency) {
+          if(dependency.hasOwnProperty(key)) {
+            // console.log(key + " -> " + dependency[key]);
+
+            if(dependency[key]!=null) {
+
+              if(key!='path') {
+                // remove system path
+                if(dependency[key].includes('/src/templates/')) {
+                  dependency[key] = dependency[key].split('/src/templates/')[1];
+                }
+                // remove filename
+                dependency[key] = dependency[key].substring(0, dependency[key].lastIndexOf("/"));
+              }
+            }
+
+          }
+        }
+
+        // remove own dep
+        if(dependency['name']=='modules/' + mod) {
+          removeIndex = i;
+        }
+
+      });
+
+      dependencies.splice(removeIndex, 1);
+
+      fs.writeFile(`./src/templates/modules/${mod}/meta/dependencies.json`, JSON.stringify(obj), 'utf8', () => {});
     };
 
-const getDirs = p => fs.readdirSync(p).filter(f => fs.statSync(path.join(p, f)).isDirectory());
-
 console.log('create entrypoints..');
-
-const prepareDependencies = async (mod) => {
-  let env = nunjucks.configure(`./src/templates`);
-  let {dependencies} = await parseFile(env, `modules/${mod}/${mod}.njk`);
-  let obj = {
-    dependencies: dependencies
-  }
-  fs.writeFile(`./src/templates/modules/${mod}/meta/dependencies.json`, JSON.stringify(obj), 'utf8', () => {});
-}
-
-// store elements
-modules = getDirs(`./src/templates/modules`);
-components = getDirs(`./src/templates/components`);
-pages = getDirs(`./src/templates/pages`);
 
 modules.forEach((mod) => {
   const path = `./src/templates/modules/${mod}/main.js`;

@@ -24,16 +24,18 @@ let instance = {},
 // Module Variables
 let settings = {},
     container,
-    colors = ['#e8175d','#cc527a'],
+    colors = ['#e8175d','#e8175d'],
     anchors = [["Top", "Top"], ["Bottom", "Bottom"]],
     moduleCards,
     counter = 0;
 
 let j = require("../../../node_modules/jsplumb/dist/js/jsplumb.js").jsPlumb.getInstance({
-  Connector: ["Flowchart", {curviness: 1, stub: 7}, {cssClass:"connectorClass", lineWidth:2, strokeStyle:'blue'}],
+  Connector: ["Bezier", {curviness: 100, stub: 10}, {cssClass:"connectorClass", lineWidth:2, strokeStyle:'blue'}],
   Anchor: "Bottom",
-  endpoint:[ "Dot", { radius: 5 } ],
-  paintStyle:{ lineWidth:2, strokeStyle:'green' }
+  endpoint:[ "Dot", { radius: 1 } ],
+  ConnectionOverlays: [
+    [ "Arrow", { location: 0, width: 10, length: 7, foldbackPoint: 0.62, direction:-1 }]
+]
 });
 
 // Private Functions
@@ -82,12 +84,11 @@ loadFile = (url, name, type, el, path, button) => {
 },
 prepareData = ({ data = {}, element = {}} = {}) => {
 
-  console.log(data);
-  /*let source = el.getAttribute('data-path');
+  console.log(data.dependencies);
 
-  depArr.forEach((dep) => {
-    connect(source, dep);
-  });*/
+  data.dependencies.forEach((dependency) => {
+    connect(dependency.parent, dependency.name);
+  });
 },
 connect = (source, target) => {
 
@@ -99,8 +100,9 @@ connect = (source, target) => {
   let settings = {
     paintStyle:{
       stroke: colors[counter%2],
-      strokeWidth:1,
-      curviness: 1350
+      strokeWidth:2,
+      curviness: 300,
+      stub: 20
     },
     anchors: anchors[counter%2],
     endpoint:[ "Dot", { radius: 3 } ],
