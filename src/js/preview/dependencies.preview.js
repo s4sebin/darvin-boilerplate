@@ -37,24 +37,24 @@ let j = require("../../../node_modules/jsplumb/dist/js/jsplumb.js").jsPlumb.getI
 });
 
 // Private Functions
-const initCard = (card) => {
-  if(card.querySelector('a[data-dep]')) {
-    card.querySelector('a[data-dep]').addEventListener('click', initClick);
+const initCard = (el) => {
+  if(el.querySelector('a[data-dep]')) {
+    el.querySelector('a[data-dep]').addEventListener('click', initClick);
   }
 },
 initClick = (e) => {
   let button = e.currentTarget,
-      card = button.closest('.prev-m-index__item'),
-      path = card.getAttribute('data-path'),
+      el = button.closest('.prev-m-index__item'),
+      path = el.getAttribute('data-path'),
       url = `${path}/meta/dependencies.json`,
-      name = card.getAttribute('data-name'),
-      type = card.getAttribute('data-type');
+      name = el.getAttribute('data-name'),
+      type = el.getAttribute('data-type');
 
 
   if(button.getAttribute('data-init')==null) {
-    loadFile(url, name, type, card, path, button);
+    loadFile(url, name, type, el, path, button);
   } else {
-    prepareData(card.getAttribute('data-dep').split(','), card);
+    prepareData({ data: JSON.parse(el.getAttribute('data-dep')), element: el });
   }
 },
 loadFile = (url, name, type, el, path, button) => {
@@ -67,38 +67,27 @@ loadFile = (url, name, type, el, path, button) => {
         return Promise.reject(new Error('Failed to load'));
       }
     })
-    .then(response => response.text())
-    .then((csv) => {
-      let dataArr = csv.split(',');
-      let pathArr = [];
+    .then(response => response.json())
+    .then((data) => {
 
-      dataArr.forEach((dataItem) => {
-        let dataItemPath = dataItem.substring(0, dataItem.lastIndexOf("/"));
-        if(path !== dataItemPath) {
-          dataItem = dataItemPath;
-          pathArr.push(dataItem);
-        }
-      });
-
-      let newArr = [...new Set(pathArr)];
-      el.setAttribute('data-dep', newArr);
+      el.setAttribute('data-dep', JSON.stringify(data));
       button.setAttribute('data-init', '');
 
-      prepareData(newArr, el);
+      prepareData({ data: data, element: el });
     })
     .catch(function(error) {
       console.error(`Error: ${error.message}`);
     });
 
 },
-prepareData = (depArr, card) => {
+prepareData = ({ data = {}, element = {}} = {}) => {
 
-
-  let source = card.getAttribute('data-path');
+  console.log(data);
+  /*let source = el.getAttribute('data-path');
 
   depArr.forEach((dep) => {
     connect(source, dep);
-  });
+  });*/
 },
 connect = (source, target) => {
 

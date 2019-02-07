@@ -1,4 +1,5 @@
 /* eslint-disable */
+const path = require('path');
 const basePath = process.cwd();
 
 const dirModule = './src/templates/modules';
@@ -7,7 +8,6 @@ const dirPages = './src/templates/pages';
 
 const fs = require('fs');
 const simpleGit = require('simple-git')(basePath);
-
 const nunjucks = require('nunjucks');
 const { parseFile } = require('nunjucks-parser');
 
@@ -21,7 +21,6 @@ let modules = [],
     activityDays = 20,
     endDate = new Date(),
     startDate = new Date(endDate.getTime() - (activityDays * 24 * 60 * 60 * 1000)),
-
     filterCommitsInDateRange = (startDate, endDate, commitsArr) => {
       let retArr = [];
       let commitsArrDate = commitsArr.map(item => ( new Date(item.date.split(' ')[0]) ));
@@ -39,38 +38,30 @@ let modules = [],
       return retArr;
     };
 
+const getDirs = p => fs.readdirSync(p).filter(f => fs.statSync(path.join(p, f)).isDirectory());
+
 console.log('create entrypoints..');
 
-// store modules
-fs.readdirSync(dirModule).forEach((file) => {
-  modules.push(file);
-});
+const prepareDependencies = async (mod) => {
+  let env = nunjucks.configure(`./src/templates`);
+  let {dependencies} = await parseFile(env, `modules/${mod}/${mod}.njk`);
+  let obj = {
+    dependencies: dependencies
+  }
+  fs.writeFile(`./src/templates/modules/${mod}/meta/dependencies.json`, JSON.stringify(obj), 'utf8', () => {});
+}
 
-// store components
-fs.readdirSync(dirComponents).forEach((file) => {
-  components.push(file);
-});
-
-// store components
-fs.readdirSync(dirPages).forEach((file) => {
-  pages.push(file);
-});
+// store elements
+modules = getDirs(`./src/templates/modules`);
+components = getDirs(`./src/templates/components`);
+pages = getDirs(`./src/templates/pages`);
 
 modules.forEach((mod) => {
   const path = `./src/templates/modules/${mod}/main.js`;
   let name = 'modules/' + mod + '/' + mod;
   webpackEntryObj[name] = [];
 
-  async function prepareDependencies() {
-    let env = nunjucks.configure(`./src/templates`);
-    let {dependencies} = await parseFile(env, `modules/${mod}/${mod}.njk`);
-    let obj = {
-      dependencies: dependencies
-    }
-    fs.writeFile(`./src/templates/modules/${mod}/meta/dependencies.json`, JSON.stringify(obj), 'utf8', () => {});
-  }
-
-  prepareDependencies();
+  prepareDependencies(mod);
 
   // check if js entry file exist
   try {

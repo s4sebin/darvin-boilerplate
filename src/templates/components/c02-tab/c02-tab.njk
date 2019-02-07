@@ -1,4 +1,4 @@
-{% import "../c01-svg_icon/c01-svg_icon.njk" as svgIcon %}
+{% import "components/c01-svg_icon/c01-svg_icon.njk" as svgIcon %}
 
 {% macro main(basePath='', title='', triggerName=false) %}
     <!-- C Tab -->
@@ -11,9 +11,7 @@
         </a>
         <div class="tab__contentbox" data-tab-contentbox>
             <div class="tab__content" data-tab-content>
-
                 {{ caller() }}
-
             </div>
         </div>
     </div>
