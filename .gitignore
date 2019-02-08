@@ -8,6 +8,8 @@ resources/*.css
 logs
 *.log
 npm-debug.log*
+activity.json
+dependencies.json
 
 # Runtime data
 pids

@@ -1,7 +1,20 @@
 ![](http://tobiasfrei.ch/github/darvin-boilerplate/darvin-MIT_(c)TobiasFrei.svg)
 
 Darvin is a webpack boilerplate for developing static sites based on components and modules. HTML rendering with Mozilla Nunjucks templating engine, ES201X transpiler and Sass precompiling with SVG sprites. Git hooks for csscomb and linting, custom modernizr functions and hot load with browsersync.
-Each build creates a preview for components, modules, assets and pagetypes. Preview elements are isolated by specific chunks.
+Each build creates a preview for components, modules, assets and pagetypes. Preview elements are isolated by specific chunks. 
+
+Preview Features:
+- Dependency Visualizer
+- Activity Chart
+- Source Preview
+- Element Readme
+
+Open:
+- Optimize pipelines
+- smoke test
+- prod pipeline
+- feature configs
+- design
 
 ## Darvin Boilerplate - Start
 ![](https://img.shields.io/github/issues-closed-raw/tobiasfrei/darvin-boilerplate.svg?style=popout-square)
@@ -35,7 +48,7 @@ Run watcher and hot load browser on file changes.<br>
 
 ### Production
 Run this mode for minifyed outstream. Required for SEO purpose and many CMS asset aggregations.<br>
-```npm run build```
+```npm run prod```
 
 ## Sprites
 SVG Spritemap will be generated referenced to filenames in:<br>
