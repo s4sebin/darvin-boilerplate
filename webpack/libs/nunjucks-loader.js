@@ -47,7 +47,7 @@ const NunjucksLoader = nunjucks.Loader.extend({
     return {
       src: fs.readFileSync(fullpath, 'utf-8'),
       path: fullpath,
-      noCache: true,
+      noCache: false,
     };
   },
 });

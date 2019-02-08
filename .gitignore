@@ -10,6 +10,7 @@ logs
 npm-debug.log*
 activity.json
 dependencies.json
+entry.report.json
 
 # Runtime data
 pids

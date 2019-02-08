@@ -2,43 +2,37 @@ const path = require('path');
 const basePath = process.cwd();
 
 const merge = require('webpack-merge');
-const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
-const WebpackNotifierPlugin = require('webpack-notifier');
-
 const webpackConfig = require('../webpack.config');
 
-const config = require('./settings/config/webpack.config.dev');
-const css = require('./settings/sass/webpack.config.dev');
-const js = require('./settings/babel/webpack.config.dev');
-const fonts = require('./settings/fonts/webpack.config.dev');
-const images = require('./settings/images/webpack.config.dev');
-const browserSync = require('./settings/browsersync/webpack.config.dev');
-const modernizr = require('./settings/modernizr/webpack.config.dev');
-const nunjucks = require('./settings/nunjucks/webpack.config.dev');
-const vue = require('./settings/vue/webpack.config.dev');
-const sprites = require('./settings/sprites/webpack.config.dev');
-const clean = require('./settings/clean/webpack.config.dev');
-const markdown = require('./settings/markdown/webpack.config.dev');
-const copy = require('./settings/copyassets/webpack.config.dev');
+/*** Dynamic Imports START ***/
+const { dev: browserSync } = require('./settings/env-browsersync');
+const { dev: clean } = require('./settings/assets-cleaner');
+const { dev: copy } = require('./settings/assets-copy');
+const { dev: config } = require('./settings/javascript-i18n');
+const { dev: css } = require('./settings/style-sass');
+const { dev: fonts } = require('./settings/assets-fonts');
+const { dev: images } = require('./settings/assets-images');
+const { dev: js } = require('./settings/javascript');
+const { dev: markdown } = require('./settings/html-markdown');
+const { dev: modernizr } = require('./settings/javascript-modernizr');
+const { dev: nunjucks } = require('./settings/html-nunjucks');
+const { dev: sprites } = require('./settings/assets-sprites');
+const { dev: vue } = require('./settings/javascript-vue');
+/*** Dynamic Imports END ***/
 
-let entrys = require('./libs/create-entrys');
+let { webpackEntryObj } = require('./libs/darvin-webpack');
 
 const settings = {
-  entry: require('./libs/create-entrys'),
+  entry: webpackEntryObj,
   output: {
-    devtoolLineToLine: true,
-    sourceMapFilename: '[name].[chunkhash].js.map',
+    devtoolLineToLine: false,
+    // sourceMapFilename: '[name].js.map',
     path: path.resolve(basePath, 'dist'),
     pathinfo: false,
-    filename: '[name].[chunkhash].js',
-    chunkFilename: 'async/[name].chunk.js',
+    filename: '[name].js',
     publicPath: '/'
   },
   devtool: 'cheap-module-eval-source-map',
-  plugins: [
-    new FriendlyErrorsWebpackPlugin(),
-    new WebpackNotifierPlugin()
-  ],
   watchOptions: {
     aggregateTimeout: 300,
     ignored: ['**/*.woff', '**/*.woff2', '**/*.jpg', '**/*.png', '**/*.svg', 'node_modules'],

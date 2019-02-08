@@ -4,27 +4,31 @@ const merge = require('webpack-merge');
 
 const webpackConfig = require('../webpack.config');
 
-const config = require('./settings/config/webpack.config.build');
-const css = require('./settings/sass/webpack.config.build');
-const js = require('./settings/babel/webpack.config.build');
-const fonts = require('./settings/fonts/webpack.config.build');
-const images = require('./settings/images/webpack.config.build');
-const modernizr = require('./settings/modernizr/webpack.config.build');
-const nunjucks = require('./settings/nunjucks/webpack.config.build');
-const vue = require('./settings/vue/webpack.config.build');
-const analyzer = require('./settings/analyzer/webpack.config.build');
-const sprites = require('./settings/sprites/webpack.config.build');
-const clean = require('./settings/clean/webpack.config.build');
-const copy = require('./settings/copyassets/webpack.config.build');
+/*** Dynamic Imports START ***/
+const { prod: analyzer } = require('./settings/bundler-analyzer');
+const { prod: clean } = require('./settings/assets-cleaner');
+const { prod: copy } = require('./settings/assets-copy');
+const { prod: config } = require('./settings/javascript-i18n');
+const { prod: css } = require('./settings/style-sass');
+const { prod: fonts } = require('./settings/assets-fonts');
+const { prod: images } = require('./settings/assets-images');
+const { prod: js } = require('./settings/javascript');
+const { prod: modernizr } = require('./settings/javascript-modernizr');
+const { prod: nunjucks } = require('./settings/html-nunjucks');
+const { prod: sprites } = require('./settings/assets-sprites');
+const { prod: vue } = require('./settings/javascript-vue');
+/*** Dynamic Imports END ***/
+
+let { webpackEntryObj } = require('./libs/darvin-webpack');
 
 const settings = {
-  entry: require('./libs/create-entrys'),
+  entry: webpackEntryObj,
   output: {
     devtoolLineToLine: true,
-    sourceMapFilename: '[name].[chunkhash].js.map',
+    sourceMapFilename: '[name].js.map',
     path: path.resolve(basePath, 'dist'),
     pathinfo: false,
-    filename: '[name].[chunkhash].js',
+    filename: '[name].js',
     chunkFilename: 'async/[name].chunk.js',
     publicPath: '/'
   },
