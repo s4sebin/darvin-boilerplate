@@ -1,6 +1,6 @@
 ![](http://tobiasfrei.ch/github/darvin-boilerplate/darvin-MIT_(c)TobiasFrei.svg)
 
-Darvin is a webpack boilerplate for developing static sites based on components and modules. HTML rendering with Mozilla Nunjucks templating engine, ES201X transpiler and Sass precompiling with SVG sprites. Git hooks for csscomb and linting, custom modernizr functions and hot load with browsersync.
+Darvin is a webpack boilerplate for developing static sites based on components and modules. HTML rendering with Mozilla Nunjucks templating engine, ES201X transpiler and Sass precompiling with SVG sprites. Git hooks for csscomb and linting, custom modernizr functions and hot-reload with browsersync.
 Each build creates a preview for components, modules, assets and pagetypes. Preview elements are isolated by specific chunks. 
 
 Preview Features:
@@ -138,6 +138,7 @@ That behaviour save us responsivness on different layouts.
 
 ## Contributors
 [https://github.com/christiansany](https://github.com/christiansany)
+[https://github.com/saschaeggi](https://github.com/saschaeggi)
 
 ## License
 Apache 2.0.
