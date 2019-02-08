@@ -8,9 +8,6 @@ resources/*.css
 logs
 *.log
 npm-debug.log*
-activity.json
-dependencies.json
-entry.report.json
 
 # Runtime data
 pids
@@ -160,3 +157,6 @@ sftp-config.json
 # Visual Studio Code - https://code.visualstudio.com/
 .settings/
 .vscode/
+
+### Darvin ###
+

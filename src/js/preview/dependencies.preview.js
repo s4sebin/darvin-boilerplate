@@ -1,8 +1,6 @@
 /**
- * @file Darvin Element Activity
+ * @file Darvin Element Dependencies
  * @author Tobias Frei
- *
- * TODO!: cleanup and refactor
  *
  * @module activity
  */
@@ -48,7 +46,7 @@ initClick = (e) => {
   let button = e.currentTarget,
       el = button.closest('.prev-m-index__item'),
       path = el.getAttribute('data-path'),
-      url = `${path}/meta/dependencies.json`,
+      url = `${path}/log/dependencies.json`,
       name = el.getAttribute('data-name'),
       type = el.getAttribute('data-type');
 
@@ -56,7 +54,7 @@ initClick = (e) => {
   if(button.getAttribute('data-init')==null) {
     loadFile(url, name, type, el, path, button);
   } else {
-    prepareData({ data: JSON.parse(el.getAttribute('data-dep')), element: el });
+    prepareData({ data: JSON.parse(el.getAttribute('data-dep')) });
   }
 },
 loadFile = (url, name, type, el, path, button) => {
@@ -75,17 +73,12 @@ loadFile = (url, name, type, el, path, button) => {
       el.setAttribute('data-dep', JSON.stringify(data));
       button.setAttribute('data-init', '');
 
-      prepareData({ data: data, element: el });
+      prepareData({ data: data });
     })
-    .catch(function(error) {
-      console.error(`Error: ${error.message}`);
-    });
+    .catch(function() {});
 
 },
-prepareData = ({ data = {}, element = {}} = {}) => {
-
-  console.log(data.dependencies);
-
+prepareData = ({ data = {}} = {}) => {
   data.dependencies.forEach((dependency) => {
     connect(dependency.parent, dependency.name);
   });
@@ -112,7 +105,6 @@ connect = (source, target) => {
 
   j.connect(settings);
 };
-
 
 /**
  * Initialize module

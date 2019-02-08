@@ -3,114 +3,25 @@ const path = require('path');
 const glob = require('glob');
 const basePath = process.cwd();
 
-const dirModule = './src/templates/modules';
-const dirComponents = './src/templates/components';
-const dirPages = './src/templates/pages';
-
 const fs = require('fs');
 const simpleGit = require('simple-git')(basePath);
-const nunjucks = require('nunjucks');
-const { parseFile } = require('nunjucks-parser');
 
-const webpackEntryObj = {};
+const { filterCommitsInDateRange, prepareDependencies, getTemplateFiles, getDirs } = require('./darvin-helpers');
 
-let previewIndexObj = {
-  types: [],
-  payload: {}
-},
-htmlTemplates = [],
-dir = path.resolve(basePath, 'src/templates');
-
-
-let webpackEntryDefault = ['./src/js/base.js'],
+let webpackEntryObj = {},
+    previewIndexObj = {
+      types: [],
+      payload: {}
+    },
+    htmlTemplates = [],
+    dir = path.resolve(basePath, 'src/templates'),
+    webpackEntryDefault = ['./src/js/base.js'],
     webpackEntryDefaultPreview = ['./src/js/base.js', './src/js/preview.js'],
     activityDays = 20,
     endDate = new Date(),
-    startDate = new Date(endDate.getTime() - (activityDays * 24 * 60 * 60 * 1000)),
-    getDirs = p => fs.readdirSync(p).filter(f => fs.statSync(path.join(p, f)).isDirectory()),
-    modules = getDirs(`./src/templates/modules`),
-    components = getDirs(`./src/templates/components`),
-    pages = getDirs(`./src/templates/pages`);
+    startDate = new Date(endDate.getTime() - (activityDays * 24 * 60 * 60 * 1000));
 
-const filterCommitsInDateRange = (startDate, endDate, commitsArr) => {
-      let retArr = [];
-      let commitsArrDate = commitsArr.map(item => ( new Date(item.date.split(' ')[0]) ));
-
-      // loop all dates
-      for (var i = 0; i < commitsArrDate.length; i++) {
-          let date = commitsArrDate[i];
-
-          // if date between startDate and endDate range
-          if (startDate <= date && date <= endDate) {
-            retArr.push(commitsArr[i]);
-        }
-      }
-
-      return retArr;
-    },
-    prepareDependencies = async (file, type) => {
-      let env = nunjucks.configure(`./src/templates`);
-      let {dependencies} = await parseFile(env, `${type}/${file}/${file}.njk`);
-      let removeIndex = 0;
-      let obj = {
-        dependencies: dependencies
-      }
-
-      dependencies.forEach((dependency, i) => {
-        for (var key in dependency) {
-          if(dependency.hasOwnProperty(key)) {
-            // console.log(key + " -> " + dependency[key]);
-
-            if(dependency[key]!=null) {
-
-              if(key!='path') {
-                // remove system path
-                if(dependency[key].includes('/src/templates/')) {
-                  dependency[key] = dependency[key].split('/src/templates/')[1];
-                }
-                // remove filename
-                dependency[key] = dependency[key].substring(0, dependency[key].lastIndexOf("/"));
-              }
-            }
-
-          }
-        }
-
-        // remove own dep
-        if(dependency['name']==`${type}/${file}`) {
-          removeIndex = i;
-        }
-
-      });
-
-      dependencies.splice(removeIndex, 1);
-
-      fs.writeFile(`./src/templates/${type}/${file}/meta/dependencies.json`, JSON.stringify(obj), 'utf8', () => {});
-    },
-    getTemplateFiles = (type, file) => {
-      let templatePath = `src/templates/${type}/${file}/${file}.njk`;
-      let tmplPreviews = [];
-
-      if (!fs.existsSync( path.resolve(basePath, `${templatePath}`))) {
-          console.error("TEMPLATE NOT EXIST! " + path.resolve(basePath, `${templatePath}`));
-          return [];
-      }
-
-      // get previews
-      tmplPreviews = glob.sync('*.preview*.njk', {
-        cwd: path.join(basePath, `src/templates/${type}/${file}/`),
-        realpath: false
-      }).map(page => {
-        return page.replace('.njk', '');
-      });
-
-      return {
-        template: templatePath,
-        previews: tmplPreviews
-      }
-    };
-
-    console.log('build template context..');
+console.log('start darvin..');
 
 // get all categories
 previewIndexObj.types = getDirs(dir);
@@ -126,7 +37,7 @@ previewIndexObj.types.forEach((type) => {
   fs.readdirSync(path.resolve(basePath, `src/templates/${type}`)).forEach((file) => {
 
     // only accept files not starting with _ or .
-    if(file.charAt(0)!=='_'&&file.charAt(0)!=='.') {
+    if (file.charAt(0) !== '_' && file.charAt(0) !== '.') {
       let templateObj = getTemplateFiles(type, file);
       let tmplPath = templateObj.template.substring(0, templateObj.template.lastIndexOf("/")).replace('src/templates/', '');
       let config = {};
@@ -143,12 +54,12 @@ previewIndexObj.types.forEach((type) => {
         variants: templateObj.previews.length
       }
 
-      if(type==='pages') {
+      if (type === 'pages') {
         previewIndexObj.payload[type][file].previews = [`${file}`];
         previewIndexObj.payload[type][file].variants = 1;
       }
 
-      if(templateObj.previews.length==0) {
+      if (templateObj.previews.length == 0) {
         previewIndexObj.payload[type][file].chunkName = 'js/main';
       }
 
@@ -165,39 +76,47 @@ previewIndexObj.types.forEach((type) => {
 
       previewIndexObj.payload[type][file].config = config;
 
+      const jsPath = `./src/templates/${type}/${file}/main.js`;
+      let name = `${type}/${file}/${file}`;
 
-      if(type=="components"||type=="modules") {
-        const path = `./src/templates/${type}/${file}/main.js`;
-        let name = `${type}/${file}/${file}`;
+      prepareDependencies(file, type);
 
-        prepareDependencies(file, type);
 
-        // check if js entry file exist
+      // create entry if element js exist
+      try {
+        if (fs.existsSync(jsPath)) {
+          webpackEntryObj[name] = [];
+
+          // add to default preview entrys
+          let entry = webpackEntryDefaultPreview.slice(0);
+          entry.push(jsPath);
+
+          webpackEntryDefault.push(jsPath);
+          webpackEntryObj[name] = entry;
+
+          // set chunk
+          previewIndexObj.payload[type][file].chunkName = `${tmplPath}/${file}`;
+        }
+      } catch (err) { }
+
+      // filter last commits from last days
+      simpleGit.log({ 'file': `./src/templates/${type}/${file}/${file}.njk` }, (err, log) => {
+        let filteredCommits = filterCommitsInDateRange(startDate, endDate, log.all);
+        log.all = filteredCommits;
+
+        console.log('get log!');
+
+        let obj = {};
+
+        // get object to extend if exist
         try {
-          if (fs.existsSync(path)) {
-            webpackEntryObj[name] = [];
+          obj = JSON.parse(fs.readFileSync(`./log/activity-visualizer.json`, 'utf8'));
+        } catch (err) {}
 
-            // add to default preview entrys
-            let entry = webpackEntryDefaultPreview.slice(0);
-            entry.push(path);
+        obj[file] = log;
 
-            webpackEntryDefault.push(path);
-            webpackEntryObj[name] = entry;
-
-            previewIndexObj.payload[type][file].chunkName = `${tmplPath}/${file}`;
-
-          }
-        } catch(err) {}
-
-        // write git commits from module dir
-        simpleGit.log({'file': `./src/templates/${type}/${file}/${file}.njk`}, (err, log) => {
-          let filteredCommits = filterCommitsInDateRange(startDate, endDate, log.all);
-          log.all = filteredCommits;
-
-          fs.writeFile(`./src/templates/${type}/${file}/meta/activity.json`, JSON.stringify(log), 'utf8', () => {});
-        });
-      }
-
+        fs.writeFile(`./log/activity-visualizer.json`, JSON.stringify(obj), 'utf8', () => { });
+      });
     }
 
   });
@@ -207,7 +126,7 @@ previewIndexObj.types.forEach((type) => {
 webpackEntryObj['js/main'] = webpackEntryDefault;
 webpackEntryObj['js/preview'] = webpackEntryDefaultPreview;
 
-fs.writeFile(`./entry.report.json`, JSON.stringify(webpackEntryObj), 'utf8', () => {});
+fs.writeFile(`./log/entry.report.json`, JSON.stringify(webpackEntryObj), 'utf8', () => { });
 
 module.exports = {
   webpackEntryObj: webpackEntryObj,

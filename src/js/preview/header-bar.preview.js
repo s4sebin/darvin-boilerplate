@@ -81,9 +81,7 @@ getReadme = (el) => {
       overlay.classList.add('is-active');
       el.classList.add('is-open');
     })
-    .catch(function(error) {
-      console.log(`Error: ${error.message}`);
-    });
+    .catch(function() {});
 
     document.body.classList.add('preview__content--off');
 
@@ -120,9 +118,7 @@ getSource = (el) => {
       overlay.classList.add('is-active');
       el.classList.add('is-open');
     })
-    .catch(function(error) {
-      console.log(`Error: ${error.message}`);
-    });
+    .catch(() => {});
 
     document.body.classList.add('preview__content--off');
 };

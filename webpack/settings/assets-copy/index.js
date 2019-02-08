@@ -5,7 +5,12 @@ const prod = {
   plugins: [
     new CopyWebpackPlugin([
       {
-        from: basePath + '/src/templates/modules/**/*.{md,json}',
+        from: basePath + '/log/*.{md,json}',
+        to: 'log/',
+        flatten: true
+      },
+      {
+        from: basePath + '/src/templates/**/meta/*.{md,json}',
         to: '/',
         flatten: false,
         transformPath (targetPath) {
@@ -13,7 +18,7 @@ const prod = {
         }
       },
       {
-        from: basePath + '/src/templates/components/**/*.{md,json}',
+        from: basePath + '/src/templates/**/log/*.{md,json}',
         to: '/',
         flatten: false,
         transformPath (targetPath) {
@@ -21,15 +26,7 @@ const prod = {
         }
       },
       {
-        from: basePath + '/src/templates/components/**/*.{md,json}',
-        to: '/',
-        flatten: false,
-        transformPath (targetPath) {
-          return targetPath.split('/src/templates/')[1];
-        }
-      },
-      {
-        from: basePath + '/src/templates/**/*[!.preview].njk',
+        from: basePath + '/src/templates/[!layouts]**/*[!preview].njk',
         to: '/',
         flatten: false,
         transformPath (targetPath) {
@@ -38,7 +35,7 @@ const prod = {
       },
       {
         from: basePath + '/src/assets/images/renditions/**/*.{png,gif,jpg,svg}',
-        to: 'images/',
+        to: 'assets/images/',
         flatten: true,
       }
     ], {})
@@ -47,67 +44,50 @@ const prod = {
 
 const dev = {
   plugins: [
-    new CopyWebpackPlugin([{
-      from: basePath + '/src/templates/modules/**/*.{md,json}',
-      to: '/',
-      flatten: false,
-      transformPath (targetPath) {
-        return targetPath.split('/src/templates/')[1];
+    new CopyWebpackPlugin(
+    [
+      {
+        from: basePath + '/log/*.{md,json}',
+        to: 'log/',
+        flatten: true
+      },
+      {
+        from: basePath + '/src/assets/images/favicons/favicon-dev.ico',
+        flatten: true,
+        transformPath (targetPath) {
+          return 'favicon.ico';
+        }
+      },
+      {
+        from: basePath + '/src/templates/**/meta/*.{md,json}',
+        to: '/',
+        flatten: false,
+        transformPath (targetPath) {
+          return targetPath.split('/src/templates/')[1];
+        }
+      },
+      {
+        from: basePath + '/src/templates/**/log/*.{md,json}',
+        to: '/',
+        flatten: false,
+        transformPath (targetPath) {
+          return targetPath.split('/src/templates/')[1];
+        }
+      },
+      {
+        from: basePath + '/src/templates/[!layouts]**/*[!preview].njk',
+        to: '/',
+        flatten: false,
+        transformPath (targetPath) {
+          return targetPath.split('/src/templates/')[1];
+        }
+      },
+      {
+        from: basePath + '/src/assets/images/renditions/*.{png,gif,jpg,svg}',
+        to: 'assets/images/',
+        flatten: true,
       }
-    },
-    {
-      from: basePath + '/src/templates/components/**/*.{md,json}',
-      to: '/',
-      flatten: false,
-      transformPath (targetPath) {
-        return targetPath.split('/src/templates/')[1];
-      }
-    },
-    {
-      from: basePath + '/src/templates/pages/**/*.{md,json}',
-      to: '/',
-      flatten: false,
-      transformPath (targetPath) {
-        return targetPath.split('/src/templates/')[1];
-      }
-    },
-    {
-      from: basePath + '/src/templates/modules/**/*[!.preview].njk',
-      to: '/',
-      flatten: false,
-      transformPath (targetPath) {
-        return targetPath.split('/src/templates/')[1];
-      }
-    },
-    {
-      from: basePath + '/src/templates/components/**/*[!.preview].njk',
-      to: '/',
-      flatten: false,
-      transformPath (targetPath) {
-        return targetPath.split('/src/templates/')[1];
-      }
-    },
-    {
-      from: basePath + '/src/templates/pages/**/*[!.preview].njk',
-      to: '/',
-      flatten: false,
-      transformPath (targetPath) {
-        return targetPath.split('/src/templates/')[1];
-      }
-    },
-    {
-      from: basePath + '/favicon.ico',
-      to: '/',
-      flatten: false,
-      transformPath (targetPath) {
-        return targetPath.split('/src/templates/')[1];
-      }
-    },
-    {
-      from: basePath + '/src/assets/images/renditions/**/*.{png,gif,jpg,svg}',
-      to: 'images/',
-      flatten: true,
-    }], {})
+    ], {})
   ],
 }
 
