@@ -58,7 +58,11 @@ prepareDependencies = async (file, type) => {
 
   dependencies.splice(removeIndex, 1);
 
-  fs.writeFile(`./src/templates/${type}/${file}/log/dependencies.json`, JSON.stringify(obj), 'utf8', () => { });
+  if (!fs.existsSync(`./src/templates/${type}/${file}/log`)){
+    fs.mkdirSync(`./src/templates/${type}/${file}/log`);
+  }
+
+  fs.writeFileSync(`./src/templates/${type}/${file}/log/dependencies.json`, JSON.stringify(obj), 'utf8', () => { });
 },
 getTemplateFiles = (type, file) => {
   let templatePath = `src/templates/${type}/${file}/${file}.njk`;

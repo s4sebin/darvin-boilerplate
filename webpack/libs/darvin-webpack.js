@@ -101,21 +101,23 @@ previewIndexObj.types.forEach((type) => {
 
       // filter last commits from last days
       simpleGit.log({ 'file': `./src/templates/${type}/${file}/${file}.njk` }, (err, log) => {
-        let filteredCommits = filterCommitsInDateRange(startDate, endDate, log.all);
-        log.all = filteredCommits;
-
-        console.log('get log!');
-
         let obj = {};
+        let filteredCommits = filterCommitsInDateRange(startDate, endDate, log.all);
+
+        log.all = filteredCommits;
 
         // get object to extend if exist
         try {
-          obj = JSON.parse(fs.readFileSync(`./log/activity-visualizer.json`, 'utf8'));
+          obj = JSON.parse(fs.readFileSync('./log/activity-visualizer.json', 'utf8'));
         } catch (err) {}
 
         obj[file] = log;
 
-        fs.writeFile(`./log/activity-visualizer.json`, JSON.stringify(obj), 'utf8', () => { });
+        if (!fs.existsSync('./log')){
+          fs.mkdirSync('./log');
+        }
+
+        fs.writeFileSync('./log/activity-visualizer.json', JSON.stringify(obj), 'utf8', () => { });
       });
     }
 
@@ -126,7 +128,11 @@ previewIndexObj.types.forEach((type) => {
 webpackEntryObj['js/main'] = webpackEntryDefault;
 webpackEntryObj['js/preview'] = webpackEntryDefaultPreview;
 
-fs.writeFile(`./log/entry.report.json`, JSON.stringify(webpackEntryObj), 'utf8', () => { });
+if (!fs.existsSync('./log')){
+  fs.mkdirSync('./log');
+}
+
+fs.writeFileSync(`./log/entry.report.json`, JSON.stringify(webpackEntryObj), 'utf8', () => { });
 
 module.exports = {
   webpackEntryObj: webpackEntryObj,
