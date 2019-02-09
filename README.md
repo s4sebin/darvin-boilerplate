@@ -137,7 +137,7 @@ That behaviour save us responsivness on different layouts.
 [https://github.com/tobiasfrei](https://github.com/tobiasfrei)
 
 ## Contributors
-[https://github.com/christiansany](https://github.com/christiansany)
+[https://github.com/christiansany](https://github.com/christiansany)  
 [https://github.com/saschaeggi](https://github.com/saschaeggi)
 
 ## License
