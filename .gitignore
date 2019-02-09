@@ -159,4 +159,7 @@ sftp-config.json
 .vscode/
 
 ### Darvin ###
-
+log/
+dependencies.json
+activity-graph.json
+entry.report.json
