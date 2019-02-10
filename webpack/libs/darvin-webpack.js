@@ -5,6 +5,7 @@ const basePath = process.cwd();
 
 const fs = require('fs');
 const simpleGit = require('simple-git')(basePath);
+const crypto = require('crypto');
 
 const { filterCommitsInDateRange, prepareDependencies, getTemplateFiles, getDirs } = require('./darvin-helpers');
 
@@ -43,6 +44,7 @@ previewIndexObj.types.forEach((type) => {
       let config = {};
 
       previewIndexObj.payload[type][file] = {
+        id: crypto.createHash('md5').update(file).digest("hex"),
         name: file,
         type: type,
         chunkName: `js/preview`,

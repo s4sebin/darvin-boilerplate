@@ -37,6 +37,7 @@ $output-bourbon-deprecation-warnings: false;
 @import "modules/servicenav";
 @import "modules/index";
 @import "modules/overlay";
+@import "modules/filterbar";
 
 // Components
 @import "components/led";
