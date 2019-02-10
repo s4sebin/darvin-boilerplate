@@ -3,7 +3,7 @@ import {ExpandableTile} from "../tile-list/TileList";
 /**
  * Interface for the component itself
  */
-export interface FilterTileList {
+export interface CardIndex {
 
     /**
      * All available items

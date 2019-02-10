@@ -11,9 +11,9 @@
                 @sort="sortOption=arguments[0]">
             <div v-for="item in items"
                     :key="item.id">
-                <expandable-tile @updated="onTileUpdated" :name="item.name" :type="item.type" :facets="facets" :largest-height="highestElement">
+                <card-item @updated="onTileUpdated" :name="item.name" :type="item.type" :facets="facets" :largest-height="highestElement">
                     <span slot="name">{{ item.name }}</span>
-                </expandable-tile>
+                </card-item>
             </div>
         </isotope>
 
@@ -30,7 +30,7 @@
 
     export default {
         components: { isotope },
-        mixins: [facetMixin('tile-list')],
+        mixins: [facetMixin('card-list')],
         props: {
 
             category: {
@@ -38,7 +38,7 @@
             },
 
             /**
-             * @type {ExpandableTile[]}
+             * @type {CardItem[]}
              */
             items: {
                 type: Array,
@@ -46,7 +46,7 @@
             },
 
             /**
-             * @type {ExpandableTile[]}
+             * @type {CardItem[]}
              */
             title: {
                 type: String,
@@ -101,7 +101,7 @@
                 }
 
                 const el = this.$refs.isotope.$el;
-                const childs = Array.from(el.querySelectorAll('.expandable-tile__content'));
+                const childs = Array.from(el.querySelectorAll('.card-item__content'));
                 return childs.reduce((acc, child) => {
                     if (!child) {
                         return;

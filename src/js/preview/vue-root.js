@@ -1,24 +1,19 @@
-//require('es6-promise').polyfill();
-
 import Vue from 'vue';
-
 import Vuex from 'vuex';
-
 import store from './vuex';
 
 // Components
-import TileList from './tile-list/tile-list.vue';
-import ExpandableTile from './tile-list/expandable-tile/expandable-tile';
-import FilterTileList from './filter-tile-list/filter-tile-list';
-import FilterView from './filter-view/filter-view';
+import CardList from './card-list/card-list';
+import CardItem from './card-list/card-item/card-item';
+import CardIndex from './card-index/card-index';
+import FilterView from './card-filter/card-filter';
 
 Vue.use(Vuex);
 
-
-Vue.component('tile-list', TileList);
-Vue.component('expandable-tile', ExpandableTile);
-Vue.component('filter-tile-list', FilterTileList);
-Vue.component('filter-view', FilterView);
+Vue.component('card-list', CardList);
+Vue.component('card-item', CardItem);
+Vue.component('card-index', CardIndex);
+Vue.component('card-filter', FilterView);
 
 export default {
     init() {

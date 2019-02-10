@@ -1,9 +1,9 @@
 <template>
-    <div class="filter-tile-list prev-m-index" :class="['prev-m-index__index--' + counter, rootClasses]">
+    <div class="card-index prev-m-index" :class="['prev-m-index__index--' + counter, rootClasses]">
 
         <template v-for="(filteredItem, i) in filteredItems" >
           <div class="prev-m-index__col" :class="['prev-m-index__col--' + i]" :key="filteredItem.id">
-            <tile-list class="prev-m-index__category" :facets="facets" :title="i" :items="filteredItem" v-if="isLoaded"/>
+            <card-list class="prev-m-index__category" :facets="facets" :title="i" :items="filteredItem" v-if="isLoaded"/>
           </div>
         </template>
     </div>
@@ -18,7 +18,7 @@
     import { filterItems } from './helpers';
 
     export default {
-        mixins: [facetMixin('filter-tile-list')],
+        mixins: [facetMixin('card-index')],
         props: {
 
         },

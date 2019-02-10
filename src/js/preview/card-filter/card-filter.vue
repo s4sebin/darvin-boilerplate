@@ -27,7 +27,7 @@
     import facetMixin from '../libs/vue/facetMixin';
 
     export default {
-        mixins: [facetMixin('filter-view')],
+        mixins: [facetMixin('card-filter')],
         props: {},
 
         data() {

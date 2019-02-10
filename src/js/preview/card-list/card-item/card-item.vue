@@ -1,5 +1,5 @@
 <template>
-    <article class="expandable-tile prev-m-index__itemwrap"
+    <article class="card-item prev-m-index__itemwrap"
             :class="[...rootClasses, ...additionalClasses]"
     >
 
@@ -40,7 +40,6 @@
     import { mapActions, mapState } from 'vuex';
 
     let settings = {
-      container: '.prev-m-index',
       days: 20,
       height: 100,
       width: 360,
@@ -55,7 +54,7 @@
     timer;
 
     export default {
-        mixins: [facetMixin('expandable-tile')],
+        mixins: [facetMixin('card-item')],
 
         props: {
             largestHeight: {
@@ -101,7 +100,7 @@
 
             additionalClasses() {
                 return [
-                    this.isOpen ? `expandable-tile--active` : null,
+                    this.isOpen ? `card-item--active` : null,
                 ];
             },
         },

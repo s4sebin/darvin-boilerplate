@@ -1,10 +1,3 @@
-/**
- * Filter items by given category
- *
- * @param {ExpandableTile[]} items
- * @param {CategoryFilter|null} filter
- * @return {ExpandableTile[]}
- */
 export function filterItems(items, filterArr, searchString) {
   if(!filterArr) {
     return items;
