@@ -4,14 +4,14 @@
 
         <isotope :options='options'
                 item-selector="prev-m-index__item"
-                :list="items"
+                :list="list"
                 ref="isotope"
                 class="prev-m-index__items"
                 @filter="filterOption=arguments[0]"
                 @sort="sortOption=arguments[0]">
-            <div v-for="item in items"
+            <div v-for="item in list"
                     :key="item.id">
-                <card-item @updated="onTileUpdated" :name="item.name" :type="item.type" :facets="facets" :largest-height="highestElement">
+                <card-item @updated="onCardUpdated" :name="item.name" :type="item.type" :facets="facets" :largest-height="highestElement">
                     <span slot="name">{{ item.name }}</span>
                 </card-item>
             </div>
@@ -21,9 +21,10 @@
 </template>
 
 <script>
-
     import isotope from 'vueisotope';
     import axios from 'axios';
+    import FuzzySet from 'fuzzyset.js'
+    import { mapActions, mapState } from 'vuex';
 
     import facetMixin from '../libs/vue/facetMixin';
     import debounce from 'lodash.debounce';
@@ -34,101 +35,97 @@
         props: {
 
             category: {
-                type: String,
+              type: String,
             },
 
             /**
              * @type {CardItem[]}
              */
             items: {
-                type: Array,
-                default: () => [],
+              type: Array,
+              default: () => [],
             },
 
-            /**
-             * @type {CardItem[]}
-             */
             title: {
-                type: String,
-                default: '',
+              type: String,
+              default: '',
+            },
+
+            sortOption: {
+              type: String,
+              default: 'id',
             }
         },
 
         data() {
-            return {
-                masonry: null,
-                isMounted: false,
-                highestElement: null,
-                addedItems: [],
-                options: {
-                    getFilterData: {}
-                }
-            };
+          return {
+            masonry: null,
+            isMounted: false,
+            highestElement: null,
+            list: this.items,
+            addedItems: [],
+            options: {
+              getSortData: {
+                  name: "name",
+                  id: "id"
+              },
+              sortBy : "name",
+              getFilterData: {
+                "show all": function(el) {
+                  return true;
+                },
+                "search": (el) => {
+                  let a = FuzzySet();
+                  a.add(this.search);
+
+                  let fuzzyCheck = a.get(el.name);
+
+                  if(!fuzzyCheck) {
+                    return el.name.includes(this.search)
+                  }
+
+                  if(fuzzyCheck[0][0]>0.2) {
+                    return true;
+                  }
+
+                  return false;// return el.name.includes(this.search);
+                },
+              }
+            }
+          };
+        },
+
+        computed: {
+          ...mapState('filter-list', ['search']),
         },
 
         methods: {
-
-            /**
-             * Handle updates triggered from the tile itself
-             */
-            onTileUpdated() {
-                this.$nextTick(() => {
-                    if(this.$refs.isotope) this.$refs.isotope.arrange();
-                });
-            },
-
-            /**
-             * Reset all heights and recalculate the highest in the next tick
-             */
-            recomputeHightestElement() {
-                if (!this.isMounted) {
-                    return;
-                }
-
-                this.highestElement = null;
-                this.$nextTick(function() {
-                    this.highestElement = this.getMaxHeight();
-                });
-            },
-
-            /**
-             * Get the highest elements height
-             * @return {number}
-             */
-            getMaxHeight() {
-                if (!this.isMounted) {
-                    return;
-                }
-
-                const el = this.$refs.isotope.$el;
-                const childs = Array.from(el.querySelectorAll('.card-item__content'));
-                return childs.reduce((acc, child) => {
-                    if (!child) {
-                        return;
-                    }
-                    if (child.offsetHeight > acc) {
-                        return child.offsetHeight;
-                    }
-                    return acc;
-                }, 0);
-            },
-
-            /**
-             * Load data from API
-             */
-            newMount() {
-                console.log("cardbox mounted");
-            }
+          onCardUpdated() {
+              this.$nextTick(() => {
+                  if(this.$refs.isotope) this.$refs.isotope.arrange();
+              });
+          },
+          newMount() {
+              console.log("cardlist mounted");
+          }
         },
 
         beforeDestroy() {
             this.isMounted = false;
         },
 
-        mounted() {
-            this.isMounted = true;
+        watch: {
+          items() {
+            console.log("items changed in " + this.title);
+          },
+          search() {
+            this.$refs.isotope.filter('search');
+          }
+        },
 
-            this.newMount();
+        mounted() {
+          this.isMounted = true;
+          this.newMount();
         }
     };
 </script>

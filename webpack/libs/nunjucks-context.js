@@ -48,8 +48,8 @@ Object.keys(previewIndexObj.payload).forEach(function (key) {
 htmlTemplates.push(new HtmlWebpackPlugin({
   filename: 'index.html',
   template: 'src/templates/index.njk',
-  hash: true,
-  cache: true,
+  hash: false,
+  cache: false,
   chunks: ['js/preview'],
   templateParameters: {
     name: 'index',

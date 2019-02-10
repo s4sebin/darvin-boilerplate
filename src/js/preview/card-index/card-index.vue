@@ -1,9 +1,9 @@
 <template>
     <div class="card-index prev-m-index" :class="['prev-m-index__index--' + counter, rootClasses]">
 
-        <template v-for="(filteredItem, i) in filteredItems" >
-          <div class="prev-m-index__col" :class="['prev-m-index__col--' + i]" :key="filteredItem.id">
-            <card-list class="prev-m-index__category" :facets="facets" :title="i" :items="filteredItem" v-if="isLoaded"/>
+        <template v-for="(filteredCategory, i) in filteredCategories" >
+          <div class="prev-m-index__col" :class="['prev-m-index__col--' + i]" :key="i">
+            <card-list class="prev-m-index__category" :facets="facets" :key="i" :title="i" :items="filteredCategory" v-if="isLoaded"/>
           </div>
         </template>
     </div>
@@ -15,14 +15,13 @@
     import axios from 'axios';
 
     import facetMixin from '../libs/vue/facetMixin';
-    import { filterItems } from './helpers';
+    import { filterCategories } from './helpers';
 
     export default {
         mixins: [facetMixin('card-index')],
         props: {
 
         },
-
         data() {
             return {
                 isLoaded: false,
@@ -44,22 +43,23 @@
 
         computed: {
             ...mapState('filter-list', ['selectedFilter']),
-            ...mapState('filter-list', ['search']),
 
-            filteredItems() {
+            filteredCategories() {
                 if (!this.isLoaded) {
                     return null;
                 }
 
-                let filteredItems = filterItems(this.items, this.selectedFilter, this.search);
+                let filteredCategories = filterCategories(this.items, this.selectedFilter);
 
                 this.$children.forEach((child) => {
-                  child.onTileUpdated();
+                  this.$nextTick(function() {
+                    child.onCardUpdated();
+                  });
                 });
 
-                this.counter = Object.keys(filteredItems).length;
+                this.counter = Object.keys(filteredCategories).length;
 
-                return filteredItems;
+                return filteredCategories;
             },
 
 

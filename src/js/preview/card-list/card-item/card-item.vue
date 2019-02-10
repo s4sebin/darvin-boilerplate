@@ -7,7 +7,7 @@
           <div class="prev-m-index__panel">
             <div class="prev-m-index__itemcol prev-m-index__itemcol--grow">
               <div class="prev-m-index__itemrow">
-                <a class="prev-m-index__itemtitle" href=""><slot name="name"/></a>
+                <a class="prev-m-index__itemtitle" href="">{{ name }}</a>
               </div>
               <div class="prev-m-index__itemrow">
                 <a class="prev-m-index__flag prev-m-index__flag--design" href="" target="_blank">D</a>

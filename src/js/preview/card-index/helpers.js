@@ -1,30 +1,9 @@
-export function filterItems(items, filterArr, searchString) {
-  if(!filterArr) {
-    return items;
-  }
-
+export function filterCategories(items, filterArr) {
   let filteredObj = {};
 
   filterArr.forEach((filter) => {
-    filteredObj[filter] = items[filter];
+    filteredObj[filter] = items[filter].slice(0);
   });
-
-  if(searchString!="") {
-    let searchStringObj = {};
-    Object.keys(filteredObj).forEach((cat) => {
-      filteredObj[cat].forEach((catObj) => {
-        if(catObj.name.includes(searchString)) {
-          // match searchstring
-          if(!searchStringObj[cat]) {
-            searchStringObj[cat] = [];
-          }
-          searchStringObj[cat].push(catObj);
-        }
-      });
-    });
-
-    return searchStringObj;
-  }
 
   return filteredObj;
 }
