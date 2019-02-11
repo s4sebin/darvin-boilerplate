@@ -57,7 +57,17 @@ $preview-index-spacer: 0.5rem;
   width: calc(50% - 2 * #{$preview-index-spacer});
   margin: 0 $preview-index-spacer 1rem $preview-index-spacer;
   background-color: $color7;
-  border-bottom: 1px solid $color6;
+  border: 1px solid lighten($color6, 3);
+  border-radius: 4px;
+  user-select: none;
+
+  &.gradient-border {
+    &:hover {
+      &:after {
+        opacity: 1;
+      }
+    }
+  }
 
   .prev-m-index__index--1 & {
     max-width: 360px;
@@ -72,21 +82,23 @@ $preview-index-spacer: 0.5rem;
   }
 
   canvas {
+    display: block;
     width: 100%;
     opacity: 1;
   }
 }
 
 .prev-m-index__itemwrap {
+  z-index: 1;
   width: 100%;
 }
 
 .prev-m-index__itemfooter {
   padding: 4px 11px;
   color: $color3;
-  background-color: $color6;
-  background-image: linear-gradient(135deg, #474747 25%, #404040 25%, #404040 50%, #474747 50%, #474747 75%, #404040 75%, #404040 300%);
-  background-size: 11.31px 11.31px;
+  background-color: lighten($color7, 2);
+  //background-image: linear-gradient(135deg, #474747 25%, #404040 25%, #404040 50%, #474747 50%, #474747 75%, #404040 75%, #404040 300%);
+  //background-size: 11.31px 11.31px;
 }
 
 .prev-m-index__itemrow {
@@ -108,7 +120,7 @@ $preview-index-spacer: 0.5rem;
   transition: background-color 120ms ease-out, color 120ms ease-in;
 
   &:hover {
-    color: $color2;
+    color: darken($color2, 3);
   }
 
   &:last-child {
@@ -120,7 +132,7 @@ $preview-index-spacer: 0.5rem;
   padding: 4px 0 6px;
   font-weight: 400;
   font-size: rem(18);
-  color: $color2;
+  color: darken($color3, 3);
   user-select: none;
 }
 
@@ -170,5 +182,41 @@ $preview-index-spacer: 0.5rem;
     i {
       color: $color5;
     }
+  }
+}
+
+/* TODO: place in file */
+$borderWidth: 1px;
+
+.gradient-border {
+  position: relative;
+  border-radius: $borderWidth;
+}
+
+.gradient-border:after {
+  content: "";
+  position: absolute;
+  top: calc(-1 * #{$borderWidth});
+  left: calc(-1 * #{$borderWidth});
+  z-index: 0;
+  width: calc(100% + #{$borderWidth} * 2);
+  height: calc(100% + #{$borderWidth} * 2);
+  background: linear-gradient(60deg, #7a7a7a, #72809e, #885b75, #556266, #966873, #518171, #767e55, #8a7d5a);
+  background-size: 300% 300%;
+  border-radius: calc(2 * #{$borderWidth});
+  opacity: 0;
+  transition: opacity 240ms ease-out;
+  animation: animatedgradient 3s ease alternate infinite;
+}
+
+@keyframes animatedgradient {
+  0% {
+    background-position: 0 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
   }
 }

@@ -27,6 +27,7 @@ body {
   font-size: $base-font-size;
   font-family: $font-1;
   color: $color1;
+  letter-spacing: 0.025rem;
   background-color: $color2;
 }
 
@@ -110,7 +111,8 @@ caption {
 }
 
 button {
-  @extend %clean-button;@extend %paragraph-base;
+  @extend %clean-button;
+  @extend %paragraph-base;
 }
 
 hr {
@@ -133,7 +135,8 @@ hr {
   }
   &,
    > svg {
-    width: 100%;// Default icon size
+    width: 100%;
+    // Default icon size
     height: 100%;
 
     fill: none;
