@@ -141,4 +141,6 @@ That behaviour save us responsivness on different layouts.
 [https://github.com/saschaeggi](https://github.com/saschaeggi)
 
 ## License
-Apache 2.0.
+GNU General Public License (GPL)
+
+Darvin logo and brand related assets are protected and may not be used for personal purposes.

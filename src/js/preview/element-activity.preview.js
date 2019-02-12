@@ -87,10 +87,10 @@ const loadJson = (url) => {
         el.querySelector('.prev-c-led').classList.add('prev-c-led--green');
       }
 
-      el.querySelector('.prev-m-index__lastupdate[data-update]').innerHTML = 'Last Commit: ' + latestCommitSplits[0] + ' <span>' + latestCommitSplits[1] + '</span>';
+      el.querySelector('.prev-m-index__lastupdate[data-update]').innerHTML = latestCommitSplits[0] + ' <span>' + latestCommitSplits[1] + '</span>';
     } else {
       el.querySelector('.prev-c-led').classList.add('prev-c-led--blue');
-      el.querySelector('.prev-m-index__lastupdate[data-update]').innerHTML = 'New Module';
+      el.querySelector('.prev-m-index__lastupdate[data-update]').innerHTML = 'Uncommited';
     }
 
     let pointArr = [];

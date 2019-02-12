@@ -94,30 +94,44 @@ $preview-index-spacer: 0.5rem;
 }
 
 .prev-m-index__itemfooter {
-  padding: 4px 11px;
+  padding: 4px 8px;
   color: $color3;
-  background-color: lighten($color7, 2);
+  background-color: rgba(#3b3b3b, 0.6);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   //background-image: linear-gradient(135deg, #474747 25%, #404040 25%, #404040 50%, #474747 50%, #474747 75%, #404040 75%, #404040 300%);
   //background-size: 11.31px 11.31px;
+
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  opacity: 0.6;
+
+  .prev-m-index__minibtn {
+    margin-right: 1rem;
+  }
 }
 
 .prev-m-index__itemrow {
   display: flex;
 }
 
-.prev-m-index__flag {
-  width: 22px;
-  height: 22px;
+.prev-m-index__speclink {
+  width: 18px;
+  height: 18px;
   margin-right: 0.25rem;
-  padding: 5px 8px;
-  font-weight: 500;
+  font-weight: 400;
   font-size: 11px;
-  color: $color2;
+  color: darken($color3, 8);
   text-transform: uppercase;
   letter-spacing: 0.05rem;
-  background-color: $color6;
+  background-color: rgba($color6, 0.4);
   cursor: pointer;
   transition: background-color 120ms ease-out, color 120ms ease-in;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   &:hover {
     color: darken($color2, 3);
@@ -139,10 +153,11 @@ $preview-index-spacer: 0.5rem;
 .prev-m-index__metalbl {
   font-size: 11px;
   letter-spacing: 0.025rem;
+  color: darken($color3, 5);
 }
 
 
-.prev-m-index__flag--design {
+/*.prev-m-index__speclink--design {
   background-color: $color5;
 
   &:hover {
@@ -150,7 +165,7 @@ $preview-index-spacer: 0.5rem;
   }
 }
 
-.prev-m-index__flag--jira {
+.prev-m-index__speclink--jira {
   background-color: #0049b0;
 
   &:hover {
@@ -158,13 +173,13 @@ $preview-index-spacer: 0.5rem;
   }
 }
 
-.prev-m-index__flag--confluence {
+.prev-m-index__speclink--confluence {
   background-color: #003366;
 
   &:hover {
     background-color: darken(#003366, 10);
   }
-}
+}*/
 
 .prev-m-index__minibtn {
   display: flex;
@@ -175,12 +190,12 @@ $preview-index-spacer: 0.5rem;
   cursor: pointer;
 
   i {
-    color: lighten($color7, 6);
+    color: lighten($color7, 14);
   }
 
   &:hover {
     i {
-      color: $color5;
+      color: lighten($color7, 30);
     }
   }
 }

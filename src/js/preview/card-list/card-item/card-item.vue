@@ -1,23 +1,11 @@
 <template>
-    <article class="card-item prev-m-index__itemwrap"
-            :class="[...rootClasses, ...additionalClasses]"
-    >
+    <article class="card-item prev-m-index__itemwrap" :class="[...rootClasses, ...additionalClasses]">
 
           <canvas class="canvas" width="360" height="100"></canvas>
           <div class="prev-m-index__panel">
             <div class="prev-m-index__itemcol prev-m-index__itemcol--grow">
               <div class="prev-m-index__itemrow">
                 <a class="prev-m-index__itemtitle" href="">{{ name }}</a>
-              </div>
-              <div class="prev-m-index__itemrow">
-                <a class="prev-m-index__flag prev-m-index__flag--design" href="" target="_blank">D</a>
-                <a class="prev-m-index__flag prev-m-index__flag--jira" href="" target="_blank">J</a>
-                <a class="prev-m-index__flag prev-m-index__flag--confluence" href="" target="_blank">C</a>
-              </div>
-            </div>
-            <div class="prev-m-index__itemcol">
-              <div class="prev-m-index__itemrow">
-                <a class="prev-m-index__minibtn" data-dep><i class="i i-target"></i></a>
               </div>
             </div>
           </div>
@@ -28,6 +16,12 @@
                 <div class="prev-c-led"></div>
               </div>
               <div class="prev-m-index__metalbl prev-m-index__lastupdate" data-update>&nbsp;</div>
+            </div>
+            <div class="prev-m-index__itemrow">
+              <a class="prev-m-index__minibtn" data-dep><i class="i i-target"></i></a>
+                 <a class="prev-m-index__speclink prev-m-index__speclink--design" href="" target="_blank">D</a>
+                <a class="prev-m-index__speclink prev-m-index__speclink--jira" href="" target="_blank">J</a>
+                <a class="prev-m-index__speclink prev-m-index__speclink--confluence" href="" target="_blank">C</a>
             </div>
           </footer>
 
@@ -160,7 +154,7 @@
                     el.querySelector('.prev-c-led').classList.add('prev-c-led--green');
                   }
 
-                  el.querySelector('.prev-m-index__lastupdate[data-update]').innerHTML = 'Last Commit: ' + latestCommitSplits[0] + ' <span>' + latestCommitSplits[1] + '</span>';
+                  el.querySelector('.prev-m-index__lastupdate[data-update]').innerHTML = latestCommitSplits[0] + ' <span>' + latestCommitSplits[1] + '</span>';
                 } else {
                   el.querySelector('.prev-c-led').classList.add('prev-c-led--blue');
                   el.querySelector('.prev-m-index__lastupdate[data-update]').innerHTML = 'New Module';
@@ -195,7 +189,7 @@
                 ctx.lineWidth = 1;
                 let larg = (settings.width - 20) / (valArr.length - 1);
                 this.deltaArr[i] = (settings.height - valArr[i]) - pointArr[i];
-                pointArr[i] += this.deltaArr[i] / (i);
+                pointArr[i] += this.deltaArr[i] / (i + 10);
 
                 ctx.strokeStyle = settings.colors.grey1;
                 ctx.fillStyle = settings.colors.grey3;
