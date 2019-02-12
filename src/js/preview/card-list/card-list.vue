@@ -11,7 +11,7 @@
                 @sort="sortOption=arguments[0]">
             <div v-for="item in list"
                     :key="item.id" class="gradient-border">
-                <card-item @updated="onCardUpdated" :name="item.name" :type="item.type" :facets="facets" :largest-height="highestElement">
+                <card-item @updated="onCardUpdated" :name="item.name" :type="item.type" :item="item" :facets="facets" :largest-height="highestElement">
                     <span slot="name">{{ item.name }}</span>
                 </card-item>
             </div>

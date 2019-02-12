@@ -1,6 +1,6 @@
 {
-  "update": false,
+  "flag": true,
   "design": "http://someurl",
-  "jira": "#",
+  "jira": "http://someurl",
   "confluence": "http://someurl"
 }

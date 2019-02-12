@@ -62,6 +62,12 @@ $preview-index-spacer: 0.5rem;
   user-select: none;
 
   &.gradient-border {
+    &.is-flagged {
+      &:after {
+        opacity: 1;
+      }
+    }
+
     &:hover {
       &:after {
         opacity: 1;
