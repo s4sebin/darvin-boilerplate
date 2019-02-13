@@ -9,8 +9,8 @@
   z-index: 999;
   width: 100%;
   height: 4rem;
-  background-color: $color7;
-  border-bottom: 5px solid $color6;
+  background-color: var(--main-bg-dark);
+  border-bottom: 5px solid var(--main-bg);
   transform: translateY(0);
 
   .prev-l-constrainer {
@@ -19,6 +19,6 @@
     align-items: center;
     height: 100%;
     padding: 0 1.25rem;
-    color: $color2;
+    color: var(--main-shadow);
   }
 }

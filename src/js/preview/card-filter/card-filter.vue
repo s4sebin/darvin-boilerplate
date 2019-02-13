@@ -1,5 +1,11 @@
 <template>
     <div class="prev-m-filterbar">
+      <div class="prev-m-filterbar__mode">
+        <input id="prev-layout" type="checkbox" v-model="checkboxDarkmode" value="dark" checked="false"></input>
+          <label class="prev-m-filterbar__lbl check" for="prev-layout">
+              Darkmode
+          </label>
+        </div>
       <div class="prev-m-filterbar__search">
         <input type="text" v-model="categorySearch" placeholder=".." spellcheck="false"/>
       </div>
@@ -45,11 +51,14 @@
                  * @type {CategorySearch}
                  */
                 categorySearch: '',
+
+                checkboxDarkmode: false
             };
         },
 
         computed: {
             ...mapState('filter-list', ['search']),
+            ...mapState('filter-list', ['mode']),
             ...mapState('filter-list', ['selectedFilter']),
             ...mapState('filter-list', ['filters']),
         },
@@ -57,6 +66,7 @@
         methods: {
             ...mapActions('filter-list', ['setSelectedFilter']),
             ...mapActions('filter-list', ['setSearch']),
+            ...mapActions('filter-list', ['setMode']),
 
             /**
              * Handle click even on label
@@ -94,11 +104,23 @@
             },
             categorySearch(val) {
               this.setSearch({ search: val});
+            },
+            checkboxDarkmode(val) {
+              if(val) {
+                this.setMode({ mode: true});
+                sessionStorage.setItem("darvin-darkmode", "true");
+              } else {
+                this.setMode({ mode: false});
+                sessionStorage.setItem("darvin-darkmode", "false");
+              }
             }
         },
 
         mounted() {
-          console.log("filter mounted");
+          // darkmode
+          if(this.mode) {
+            this.checkboxDarkmode = true;
+          }
         }
     };
 </script>

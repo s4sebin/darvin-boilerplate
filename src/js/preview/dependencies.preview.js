@@ -7,16 +7,7 @@
 
 let instance = {},
       defaults = {
-        container: '.prev-m-index',
-        days: 20,
-        height: 100,
-        width: 360,
-        maxHeight: '80',
-        colors: {
-          grey1: '#363636',
-          grey2: '#343434',
-          grey3: '#292929'
-        }
+        container: '.prev-m-index'
       };
 
 // Module Variables

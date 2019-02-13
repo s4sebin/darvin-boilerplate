@@ -43,6 +43,7 @@
 
         computed: {
             ...mapState('filter-list', ['selectedFilter']),
+            ...mapState('filter-list', ['mode']),
 
             filteredCategories() {
                 if (!this.isLoaded) {
@@ -100,8 +101,20 @@
             }
         },
 
+        watch: {
+            mode() {
+                console.log("MODE CHANGE");
+                document.body.classList.toggle('darkmode');
+            }
+        },
+
         mounted() {
             this.loadData();
+
+            if(this.mode) {
+              console.log("MOUND");
+              document.body.classList.toggle('darkmode');
+            }
         },
 
 

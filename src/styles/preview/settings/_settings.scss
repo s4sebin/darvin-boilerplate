@@ -13,13 +13,46 @@ $font-1: "barlow-semi-condensed", Arial, sans-serif;
 
 //== Default Colors
 //
-$color1: #000000 !default;
-$color2: #ffffff !default;
-$color3: #a8a7a7 !default;
-$color4: #cc527a !default;
-$color5: #e8175d !default;
-$color6: #474747 !default;
-$color7: #363636 !default;
+$colors: (
+  main-dark: #1b1b1b,
+  main-bright: #ffffff,
+  main-shadow: #222222,
+  main-border: #ffffff,
+  main-ambiance: #52ccb8,
+  main-color: #4bd8b9,
+  main-color-light: #f88cea,
+  main-bg: #ffffff,
+  main-bg-soft: #363636,
+  main-bg-dark: #f0f0f0,
+  activity-bg:#e7e7e7,
+  activity-grid: #e7e7e7,
+  activity-graph: #81c0b0,
+  card-footer-bg: rgba(136, 160, 155, 0.4),
+  card-footer-text: #577374,
+  card-footer-text-hover: #494b40,
+  card-title: #505a54,
+  card-meta: #222222
+);
+$colors-dark: (
+  main-dark: #000000,
+  main-bright: #ffffff,
+  main-shadow: #a8a7a7,
+  main-border: #474747,
+  main-ambiance: #cc527a,
+  main-color: #e8175d,
+  main-color-light: #f88cea,
+  main-bg: #474747,
+  main-bg-soft: #363636,
+  main-bg-dark: #242424,
+  activity-bg:#282828,
+  activity-grid: #282828,
+  activity-graph: #e8175d,
+  card-footer-bg: rgb(56, 59, 59),
+  card-footer-text: #868686,
+  card-footer-text-hover: #bebebe,
+  card-title: #c5c5c5,
+  card-meta: #222222
+);
 
 
 //== Layout

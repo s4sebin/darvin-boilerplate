@@ -93,10 +93,6 @@
     "node": "11.7.0"
   },
   "lint-staged": {
-    "*.scss": [
-      "csscomb --tty-mode",
-      "git add"
-    ],
     "*.js": [
       "eslint --fix \"{,**,**/**}*.js\"",
       "git add"

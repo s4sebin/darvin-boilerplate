@@ -22,7 +22,7 @@
       left: -17px;
       width: 48px;
       height: 48px;
-      background: rgba($color4,0.05);
+      background: rgba(var(--main-ambiance),0.05);
       border-radius: 50%;
       opacity: 0;
       transition: opacity 0.2s ease;
@@ -55,14 +55,14 @@
         opacity: 1;
       }
       svg {
-        stroke: $color5;
+        stroke: var(--main-color);
       }
     }
   }
 
   .prev-m-filterbar__input:checked + .check {
     svg {
-      stroke: $color5;;
+      stroke: var(--main-color);;
 
       path {
         transition: all 0.3s linear;
@@ -92,15 +92,15 @@
     height: 100%;
     padding: 3px 8px 4px;
     font-weight: 400;
-    color: $color3;
+    color: var(--main-shadow);
     letter-spacing: 1px;
     background-color: transparent;
-    border: 2px solid $color6;
+    border: 2px solid var(--main-bg);
     border-radius: 4px;
 
     &:focus,
     &:hover {
-      border-color: $color5;
+      border-color: var(--main-color);
       outline: 0;
     }
   }
@@ -112,7 +112,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba($color4,0.05);
+    background: rgba(var(--main-ambiance),0.05);
     border-radius: 4px;
     opacity: 0;
     transition: opacity 0.2s ease;
@@ -134,7 +134,7 @@
 .prev-m-filterbar__lbl {
   font-weight: 400;
   font-size: 16px;
-  color: $color3;
+  color: var(--main-shadow);
   user-select: none;
 
   span {

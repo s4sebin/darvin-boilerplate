@@ -1,9 +1,19 @@
 /* ==|====================
-Base
+  Base
 ======================= */
 
 body.preview {
   font-family: $font-1;
+
+  @each $name, $color in $colors {
+    --#{$name}: #{$color};
+  }
+
+  &.darkmode {
+    @each $name, $color in $colors-dark {
+      --#{$name}: #{$color};
+    }
+  }
 
   &.preview__content--off {
     &[data-active="source"] {
@@ -46,8 +56,8 @@ body.preview {
 }
 
 ::selection {
-  color: $color2;
-  background: lighten($color5, 10);
+  color: var(--main-bright);
+  background-color: var(--main-color-light);
 }
 
 .h1-alike,
@@ -222,7 +232,7 @@ ol {
       font-size: 0.9rem;
       line-height: 1.75;
       text-align: center;
-      border: 1px solid rgba($color2, 0.8);
+      border: 1px solid rgba(var(--main-bright), 0.8);
       border-radius: 50%;
       counter-increment: item;
     }

@@ -1,3 +1,11 @@
+let mode = false;
+
+if(sessionStorage.getItem("darvin-darkmode")) {
+  if(sessionStorage.getItem("darvin-darkmode")=='true') {
+    mode = true;
+  }
+}
+
 export default {
     filters: [],
 
@@ -8,4 +16,6 @@ export default {
     activity: {},
 
     isMobileVisible: false,
+
+    mode: mode,
 }

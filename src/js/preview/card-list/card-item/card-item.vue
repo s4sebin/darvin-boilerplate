@@ -18,7 +18,7 @@
               <div class="prev-m-index__metalbl prev-m-index__lastupdate" data-update>&nbsp;</div>
             </div>
             <div class="prev-m-index__itemrow">
-              <a class="prev-m-index__minibtn" data-dep><i class="i i-target"></i></a>
+              <a class="prev-m-index__minibtn" data-dep v-on:click="getDep"><i class="i i-target"></i></a>
               <a v-if="item.config.design" class="prev-m-index__speclink prev-m-index__speclink--design" href="" target="_blank">D</a>
               <a v-if="item.config.jira" class="prev-m-index__speclink prev-m-index__speclink--jira" href="" target="_blank">J</a>
               <a v-if="item.config.confluence" class="prev-m-index__speclink prev-m-index__speclink--confluence" href="" target="_blank">C</a>
@@ -32,6 +32,18 @@
 
     import facetMixin from '../../libs/vue/facetMixin';
     import { mapActions, mapState } from 'vuex';
+    import axios from 'axios';
+
+    let j = require("jsplumb/dist/js/jsplumb.js").jsPlumb.getInstance({
+      Connector: ["Bezier", {curviness: 100, stub: 10}, {cssClass:"connectorClass", lineWidth:2, strokeStyle:'blue'}],
+      Anchor: "Bottom",
+      endpoint:[ "Dot", { radius: 1 } ],
+      ConnectionOverlays: [
+        [ "Arrow", { location: 0, width: 10, length: 7, foldbackPoint: 0.62, direction:-1 }]
+    ]
+    });
+
+    let bodyStyle = getComputedStyle(document.body);
 
     let settings = {
       days: 20,
@@ -39,13 +51,17 @@
       width: 360,
       maxHeight: '80',
       colors: {
-        grey1: '#363636',
-        grey2: '#363636',
-        grey3: '#292929'
+        grey1: bodyStyle.getPropertyValue("--activity-bg"),
+        grey2: bodyStyle.getPropertyValue("--activity-grid"),
+        grey3: bodyStyle.getPropertyValue("--activity-graph")
       }
     },
     counter = 0,
-    timer;
+    timer,
+    canvas,
+    colors = ['#e8175d','#e8175d'],
+    anchors = [["Top", "Top"], ["Bottom", "Bottom"]],
+    moduleCards;
 
     export default {
         mixins: [facetMixin('card-item')],
@@ -71,82 +87,108 @@
                 isOpen: false,
                 hasDescription: true,
                 deltaArr: [],
+                pointArr: [],
+                valArr: new Array(20),
                 timer: {},
-                counter: 0
+                counter: 0,
+                dependencies: []
             };
         },
 
         computed: {
             ...mapState('filter-list', ['activity']),
+            ...mapState('filter-list', ['mode']),
 
             cardActivity() {
-                if (!this.largestHeight || this.isOpen) {
-                    return null;
-                }
-
                 return this.activity[this.name]
-            },
-
-            contentStyle() {
-                if (!this.largestHeight || this.isOpen) {
-                    return null;
-                }
-
-                return `height: ${this.largestHeight}px`;
-            },
-
-            additionalClasses() {
-                return [
-                    this.isOpen ? `card-item--active` : null,
-                ];
             },
         },
 
         watch: {
+            dependencies() {
+                console.log('change dep');
+                this.prepareData();
+            },
             descr() {
                 this.hasDescription = false;
             },
-
-            largestHeight() {
-                this.isOpen = false;
+            mode() {
+                console.log("ITEM MODE CHANGE");
+                this.updateLayout();
             },
-
-            isOpen() {
-                this.$emit('updated');
-            }
         },
 
         methods: {
-            onOpen() {
-                this.isOpen = !this.isOpen;
+            prepareData() {
+              this.dependencies.forEach((dependency) => {
+                this.connect(dependency.parent, dependency.name);
+              });
+            },
+
+            connect(source, target) {
+
+              source = document.querySelector('.prev-m-index__item[data-path="' + source + '"]');
+              target = document.querySelector('.prev-m-index__item[data-path="' + target + '"]');
+
+              counter++;
+
+              let settings = {
+                paintStyle:{
+                  stroke: colors[counter%2],
+                  strokeWidth:2,
+                  curviness: 300,
+                  stub: 20
+                },
+                anchors: anchors[counter%2],
+                endpoint:[ "Dot", { radius: 3 } ],
+                source: source,
+                target: target
+              };
+
+              j.connect(settings);
+            },
+
+            updateLayout() {
+                settings.colors = {
+                  grey1: bodyStyle.getPropertyValue("--activity-bg"),
+                  grey2: bodyStyle.getPropertyValue("--activity-grid"),
+                  grey3: bodyStyle.getPropertyValue("--activity-graph")
+                };
+                this.draw(this.$el.querySelector('canvas').getContext('2d'), this.name, 1);
+            },
+            getDep() {
+               axios.get('./' + this.type + '/' + this.name + '/log/dependencies.json')
+                .then((response) => {
+                  this.dependencies = response.data.dependencies;
+                });
             },
             initVisualizer() {
                 let name = this.name;
                 let el = this.$el;
                 let data = this.activity[this.name];
 
-                let canvas = el.querySelector('canvas'),
-                    ctx = canvas.getContext('2d'),
-                    valArr = new Array(20);
+                let canvas = el.querySelector('canvas');
+
+                let ctx = canvas.getContext('2d');
 
                 // loop trough the last 20 days
                 for (var i = 0; i < settings.days; i++) {
                   let calcDay = new Date(new Date().getTime() - (i * 24 * 60 * 60 * 1000)).toISOString().split('T')[0];
-                  valArr[i] = ('0'); // default zero
+                  this.valArr[i] = ('0'); // default zero
 
                   // search for matching commits
                   for (var j = 0; j < data.all.length; j++) {
                     if (data.all[j].date.split(' ')[0] == calcDay) {
-                      valArr[i] = parseInt(valArr[i]) + 10;
+                      this.valArr[i] = parseInt(this.valArr[i]) + 10;
 
-                      if (parseInt(valArr[i]) > 80) {
-                        valArr[i] = settings.maxHeight;
+                      if (parseInt(this.valArr[i]) > 80) {
+                        this.valArr[i] = settings.maxHeight;
                       }
                     }
                   }
                 }
 
-                valArr.reverse();
+                this.valArr.reverse();
 
                 if (data.latest) {
                   let latestCommitSplits = data.latest.date.split(' ');
@@ -163,14 +205,13 @@
                   el.querySelector('.prev-m-index__lastupdate[data-update]').innerHTML = 'New Module';
                 }
 
-                let pointArr = [];
 
                 this.timer = setInterval(() => {
-                  this.draw(ctx, name, valArr, pointArr, 60);
+                  this.draw(ctx, name, 60);
                 }, 30);
 
             },
-            draw(ctx, name, valArr, pointArr, killSwitch) {
+            draw(ctx, name, killSwitch) {
                if(this.counter == killSwitch) {
                 // kill draw intervall
                 clearInterval(this.timer);
@@ -184,19 +225,19 @@
               ctx.save();
               this.drawGrid(ctx, settings.width, settings.height, 10, 10);
 
-              for (let i = 0; i < valArr.length; i++) {
-                if (isNaN(pointArr[i])) {
-                  pointArr[i] = settings.height;
+              for (let i = 0; i < this.valArr.length; i++) {
+                if (isNaN(this.pointArr[i])) {
+                  this.pointArr[i] = settings.height;
                 }
 
                 ctx.lineWidth = 1;
-                let larg = (settings.width - 20) / (valArr.length - 1);
-                this.deltaArr[i] = (settings.height - valArr[i]) - pointArr[i];
-                pointArr[i] += this.deltaArr[i] / (i + 10);
+                let larg = (settings.width - 20) / (this.valArr.length - 1);
+                this.deltaArr[i] = (settings.height - this.valArr[i]) - this.pointArr[i];
+                this.pointArr[i] += this.deltaArr[i] / (i + 10);
 
                 ctx.strokeStyle = settings.colors.grey1;
                 ctx.fillStyle = settings.colors.grey3;
-                this.drawingLines(ctx, larg, pointArr, i);
+                this.drawingLines(ctx, larg, this.pointArr, i);
               }
             },
             drawingLines(ctx, width, points, i) {
@@ -241,6 +282,11 @@
         mounted() {
           this.counter = 0;
           this.initVisualizer();
+
+          // darkmode
+          if(this.mode) {
+            this.updateLayout();
+          }
         }
 
     };

@@ -4,6 +4,6 @@
 
 #prev-l-footer {
   height: 2rem;
-  background-color: $color6;
-  border-top: 2px solid $color7;
+  background-color: var(--main-bg);
+  border-top: 2px solid var(--main-bg-dark);
 }

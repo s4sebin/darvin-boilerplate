@@ -12,6 +12,10 @@ export function setSearch({ commit }, { search }) {
   commit(types.SET_SEARCH, { search });
 }
 
+export function setMode({ commit }, { mode }) {
+  commit(types.SET_MODE, { mode });
+}
+
 export function setActivity({ commit }, { activity }) {
   commit(types.SET_ACTIVITY, { activity });
 }

@@ -14,6 +14,10 @@ export default {
         state.search = search;
     },
 
+    [types.SET_MODE](state, { mode }) {
+        state.mode = mode;
+    },
+
     [types.SET_ACTIVITY](state, { activity }) {
       state.activity = activity;
     },
