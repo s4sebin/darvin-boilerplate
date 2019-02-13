@@ -21,8 +21,10 @@ $colors: (
   main-ambiance: #52ccb8,
   main-color: #4bd8b9,
   main-color-light: #f88cea,
+  main-button: rgba(219, 219, 219, 0.3),
+  main-button-text: #b6b6b6,
   main-bg: #ffffff,
-  main-bg-soft: #363636,
+  main-bg-soft: rgba(182, 207, 203, 0.3),
   main-bg-dark: #f0f0f0,
   activity-bg:#e7e7e7,
   activity-grid: #e7e7e7,
@@ -33,6 +35,7 @@ $colors: (
   card-title: #505a54,
   card-meta: #222222
 );
+
 $colors-dark: (
   main-dark: #000000,
   main-bright: #ffffff,
@@ -41,9 +44,11 @@ $colors-dark: (
   main-ambiance: #cc527a,
   main-color: #e8175d,
   main-color-light: #f88cea,
-  main-bg: #474747,
+  main-button: rgba(80, 87, 86, 0.1),
+  main-button-text: #9c9c9c,
+  main-bg: #1b1b1b,
   main-bg-soft: #363636,
-  main-bg-dark: #242424,
+  main-bg-dark: #282828,
   activity-bg:#282828,
   activity-grid: #282828,
   activity-graph: #e8175d,

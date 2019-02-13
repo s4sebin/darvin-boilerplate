@@ -9,19 +9,19 @@
       <meta name="format-detection" content="telephone=no">
    </head>
    <body class="preview preview--index">
+      <script>
+        if(localStorage.getItem("darvin-darkmode")) {
+          if(localStorage.getItem("darvin-darkmode")=='true') {
+            document.body.classList.add('darkmode');
+          }
+        }
+      </script>
       <article id="l-pagewrapper">
         <!-- start preview header -->
         <header id="prev-l-header">
           <div class="prev-l-constrainer">
             <div class="prev-m-title"><h1>Darvin Boilerplate</h1></div>
             <div class="prev-m-filter"><component is="card-filter" title="Filter"></component></div>
-            <nav class="prev-m-servicenav">
-              <div class="prev-m-servicenav__item">
-                <a class="prev-m-servicenav__link prev-m-servicenav__link--bundle" href="report.html" target="_blank">
-                  <i class="i i-chart"></i>
-                </a>
-              </div>
-            </nav>
           </div>
         </header>
         <!-- start main -->

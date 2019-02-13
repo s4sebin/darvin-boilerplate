@@ -1,5 +1,5 @@
 <template>
-    <article class="card-item prev-m-index__itemwrap" :class="{'is-flagged' : item.config.flag == true}">
+    <article class="card-item prev-m-index__itemwrap">
           <canvas class="canvas" width="360" height="100"></canvas>
           <div class="prev-m-index__panel">
             <div class="prev-m-index__itemcol prev-m-index__itemcol--grow">
@@ -18,10 +18,10 @@
               <div class="prev-m-index__metalbl prev-m-index__lastupdate" data-update>&nbsp;</div>
             </div>
             <div class="prev-m-index__itemrow">
-              <a class="prev-m-index__minibtn" data-dep v-on:click="getDep"><i class="i i-target"></i></a>
-              <a v-if="item.config.design" class="prev-m-index__speclink prev-m-index__speclink--design" href="" target="_blank">D</a>
-              <a v-if="item.config.jira" class="prev-m-index__speclink prev-m-index__speclink--jira" href="" target="_blank">J</a>
-              <a v-if="item.config.confluence" class="prev-m-index__speclink prev-m-index__speclink--confluence" href="" target="_blank">C</a>
+              <a class="prev-m-index__minibtn" data-dep><i class="i i-target"></i></a>
+              <a v-if="item.config.design" class="prev-m-index__speclink prev-m-index__speclink--design" :href="item.config.design" target="_blank">D</a>
+              <a v-if="item.config.jira" class="prev-m-index__speclink prev-m-index__speclink--jira" :href="item.config.jira" target="_blank">J</a>
+              <a v-if="item.config.confluence" class="prev-m-index__speclink prev-m-index__speclink--confluence" :href="item.config.confluence" target="_blank">C</a>
             </div>
           </footer>
 

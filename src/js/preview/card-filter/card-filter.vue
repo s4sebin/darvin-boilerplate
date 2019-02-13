@@ -1,14 +1,5 @@
 <template>
     <div class="prev-m-filterbar">
-      <div class="prev-m-filterbar__mode">
-        <input id="prev-layout" type="checkbox" v-model="checkboxDarkmode" value="dark" checked="false"></input>
-          <label class="prev-m-filterbar__lbl check" for="prev-layout">
-              Darkmode
-          </label>
-        </div>
-      <div class="prev-m-filterbar__search">
-        <input type="text" v-model="categorySearch" placeholder=".." spellcheck="false"/>
-      </div>
       <div class="prev-m-filterbar__categories">
         <div class="prev-m-filterbar__category prev-m-filterbar__checkbox" v-for="filter in filters" :key="filter.value">
           <input class="prev-m-filterbar__input"
@@ -27,6 +18,16 @@
                 <span>{{ filter }}</span>
             </label>
         </div>
+        <div class="prev-m-filterbar__search">
+          <input type="text" v-model="categorySearch" placeholder=".." spellcheck="false"/>
+        </div>
+        <div class="prev-m-filterbar__mode">
+          <input id="prev-layout" class="prev-m-filterbar__modeinput" type="checkbox" v-model="checkboxDarkmode" value="dark" checked="false">
+          <label class="prev-m-filterbar__lbl prev-m-filterbar__modelbl" for="prev-layout">
+            <i v-if="!checkboxDarkmode" class="ico i-night"></i>
+            <i v-if="checkboxDarkmode" class="ico i-sun"></i>
+          </label>
+       </div>
       </div>
     </div>
 </template>
@@ -108,10 +109,12 @@
             checkboxDarkmode(val) {
               if(val) {
                 this.setMode({ mode: true});
-                sessionStorage.setItem("darvin-darkmode", "true");
+                console.log("set darkmode true" );
+                localStorage.setItem("darvin-darkmode", "true");
               } else {
                 this.setMode({ mode: false});
-                sessionStorage.setItem("darvin-darkmode", "false");
+                console.log("set darkmode false" );
+                localStorage.setItem("darvin-darkmode", "false");
               }
             }
         },

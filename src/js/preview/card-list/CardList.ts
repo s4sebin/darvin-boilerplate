@@ -15,7 +15,7 @@ export interface CardItem {
 
     chunkName?: string;
 
-    path?: string;
+    path: string;
 
-    variants?: string;
+    variants: string;
 }

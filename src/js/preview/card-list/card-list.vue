@@ -13,6 +13,7 @@
           <div v-for="item in list"
             :key="item.id"
             class="gradient-border"
+            :class="{'is-flagged' : item.config.flag === true}"
             :data-name="item.name"
             :data-type="item.type"
             :data-path="item.path">

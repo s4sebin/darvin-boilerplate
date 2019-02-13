@@ -110,11 +110,6 @@
 
         mounted() {
             this.loadData();
-
-            if(this.mode) {
-              console.log("MOUND");
-              document.body.classList.toggle('darkmode');
-            }
         },
 
 

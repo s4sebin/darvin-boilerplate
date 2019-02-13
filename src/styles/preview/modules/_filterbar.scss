@@ -86,7 +86,7 @@
 
 .prev-m-filterbar__search {
   position: relative;
-  margin: 0 1rem;
+  margin: 0 3rem 0 1rem;
 
   input {
     height: 100%;
@@ -149,4 +149,26 @@
 
 .prev-m-filterbar__input {
   display: none;
+}
+
+.prev-m-filterbar__mode {
+  display: flex;
+  align-items: center;
+}
+
+.prev-m-filterbar__modeinput {
+  display: none;
+}
+
+.prev-m-filterbar__modelbl {
+  cursor: pointer;
+  width: rem(26);
+  height: rem(26);
+  background: var(--main-button);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--main-button-text);
+  padding-top: 4px;
 }

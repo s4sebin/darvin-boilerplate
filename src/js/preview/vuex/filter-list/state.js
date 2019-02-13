@@ -1,7 +1,7 @@
 let mode = false;
 
-if(sessionStorage.getItem("darvin-darkmode")) {
-  if(sessionStorage.getItem("darvin-darkmode")=='true') {
+if(localStorage.getItem("darvin-darkmode")) {
+  if(localStorage.getItem("darvin-darkmode")=='true') {
     mode = true;
   }
 }
