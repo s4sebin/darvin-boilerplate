@@ -34,9 +34,6 @@
     import { mapActions, mapState } from 'vuex';
     import axios from 'axios';
 
-    import { LeaderLine } from "../../libs/leader-line";
-
-    let leaderline = LeaderLine();
     let bodyStyle = getComputedStyle(document.body);
 
     let settings = {
@@ -100,7 +97,6 @@
 
         watch: {
             dependencies() {
-                console.log('change dep');
                 this.prepareData();
             },
             descr() {
@@ -113,24 +109,15 @@
         },
 
         methods: {
+            ...mapActions('filter-list', ['setDependencies']),
+
             prepareData() {
-              this.dependencies.forEach((dependency) => {
+                document.body.classList.add('dependency-mode');
+              this.setDependencies({ dependencies: this.dependencies });
+
+              /*this.dependencies.forEach((dependency) => {
                 this.connect(dependency.parent, dependency.name);
-              });
-            },
-
-            connect(source, target) {
-
-              source = document.querySelector('.prev-m-index__item[data-path="' + source + '"]');
-              target = document.querySelector('.prev-m-index__item[data-path="' + target + '"]');
-
-              counter++;
-
-              new leaderline(
-                source,
-                target,
-                {color: bodyStyle.getPropertyValue("--dependency-stroke"), size: 2, path: 'arc', startSocket: 'bottom', endSocket: 'bottom' }
-              )
+              });*/
             },
             updateLayout() {
                 settings.colors = {

@@ -18,4 +18,8 @@ export default {
     isMobileVisible: false,
 
     mode: mode,
+
+    dependencies: [],
+
+    ready: [],
 }

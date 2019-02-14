@@ -17,6 +17,11 @@
     import facetMixin from '../libs/vue/facetMixin';
     import { filterCategories } from './helpers';
 
+    import { LeaderLine } from "../libs/leader-line";
+
+    let leaderline = LeaderLine();
+    let bodyStyle = getComputedStyle(document.body);
+
     export default {
         mixins: [facetMixin('card-index')],
         props: {
@@ -44,7 +49,8 @@
         computed: {
             ...mapState('filter-list', ['selectedFilter']),
             ...mapState('filter-list', ['mode']),
-
+            ...mapState('filter-list', ['ready']),
+            ...mapState('filter-list', ['dependencies']),
             filteredCategories() {
                 if (!this.isLoaded) {
                     return null;
@@ -70,6 +76,30 @@
             ...mapActions('filter-list', ['setFilters', 'setSelectedFilter']),
             ...mapActions('filter-list', ['setSearch']),
             ...mapActions('filter-list', ['setActivity']),
+            ...mapActions('filter-list', ['setReady']),
+
+            paintLines() {
+              console.log("-- PAINT LINES --");
+
+              this.dependencies.forEach((dependency) => {
+                this.connect(dependency.parent, dependency.name);
+              });
+            },
+
+            connect(source, target) {
+
+              source = document.querySelector('.prev-m-index__item[data-path="' + source + '"]');
+              target = document.querySelector('.prev-m-index__item[data-path="' + target + '"]');
+
+              console.log(source);
+              console.log(target);
+
+              new leaderline(
+                source,
+                target,
+                {color: bodyStyle.getPropertyValue("--dependency-stroke"), size: 2, path: 'arc', startSocket: 'bottom', endSocket: 'bottom' }
+              )
+            },
 
             loadData() {
 
@@ -103,9 +133,18 @@
 
         watch: {
             mode() {
-                console.log("MODE CHANGE");
-                document.body.classList.toggle('darkmode');
-            }
+              document.body.classList.toggle('darkmode');
+            },
+            dependencies() {
+              // set callback array and wait for ready events
+              this.setReady({ ready: [] });
+            },
+            ready() {
+              if(this.ready.length === Object.keys(this.filteredCategories).length) {
+                console.log("-> all lists are arranged");
+                this.paintLines();
+              }
+            },
         },
 
         mounted() {

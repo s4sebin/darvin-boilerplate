@@ -66,6 +66,7 @@
         data() {
           return {
             masonry: null,
+            arr1d: [],
             isMounted: false,
             highestElement: null,
             list: this.items,
@@ -94,7 +95,14 @@
                     return true;
                   }
 
-                  return false;// return el.name.includes(this.search);
+                  return false;
+                },
+                "dependencies": (el) => {
+                  if(this.arr1d.includes(el.path)) {
+                    return true
+                  }
+
+                  return false;
                 },
               }
             }
@@ -103,16 +111,26 @@
 
         computed: {
           ...mapState('filter-list', ['search']),
+          ...mapState('filter-list', ['dependencies']),
+          ...mapState('filter-list', ['ready']),
         },
 
         methods: {
+          ...mapActions('filter-list', ['setReady']),
+
           onCardUpdated() {
               this.$nextTick(() => {
                   if(this.$refs.isotope) this.$refs.isotope.arrange();
               });
           },
-          newMount() {
-              console.log("cardlist mounted");
+          arrangeDone() {
+            console.log('ARRANGE REAADY');
+
+            if(this.ready) {
+              var arr = this.ready.slice(0);
+              arr.push(this.title);
+              this.setReady({ ready: arr });
+            }
           }
         },
 
@@ -126,12 +144,21 @@
           },
           search() {
             this.$refs.isotope.filter('search');
-          }
+          },
+          dependencies() {
+            let mapArr = this.dependencies.map(dep => ( [ dep.name, dep.parent ] )) ;
+            this.arr1d = [].concat(...mapArr);
+
+            this.$refs.isotope.iso.once('arrangeComplete', ()=>{
+              this.arrangeDone();
+            });
+
+            this.$refs.isotope.filter('dependencies');
+          },
         },
 
         mounted() {
           this.isMounted = true;
-          this.newMount();
         }
     };
 </script>

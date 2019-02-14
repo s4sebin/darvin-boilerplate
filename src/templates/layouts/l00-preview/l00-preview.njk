@@ -9,6 +9,14 @@
       <meta name="format-detection" content="telephone=no">
    </head>
    <body class="preview" data-name="{{ darvin.name }}" data-filepath="{{ darvin.filepath }}" data-path="{{ darvin.path }}">
+      a
+      <script>
+        if(localStorage.getItem("darvin-darkmode")) {
+          if(localStorage.getItem("darvin-darkmode")=='true') {
+            document.body.classList.add('darkmode');
+          }
+        }
+      </script>
       <article id="l-pagewrapper">
 
         <!-- start preview header -->

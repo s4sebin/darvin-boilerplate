@@ -16,6 +16,14 @@ export function setMode({ commit }, { mode }) {
   commit(types.SET_MODE, { mode });
 }
 
+export function setDependencies({ commit }, { dependencies }) {
+  commit(types.SET_DEPENDENCIES, { dependencies });
+}
+
+export function setReady({ commit }, { ready }) {
+  commit(types.SET_READY, { ready });
+}
+
 export function setActivity({ commit }, { activity }) {
   commit(types.SET_ACTIVITY, { activity });
 }

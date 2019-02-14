@@ -18,6 +18,14 @@ export default {
         state.mode = mode;
     },
 
+    [types.SET_DEPENDENCIES](state, { dependencies }) {
+      state.dependencies = dependencies;
+    },
+
+    [types.SET_READY](state, { ready }) {
+      state.ready = ready;
+   },
+
     [types.SET_ACTIVITY](state, { activity }) {
       state.activity = activity;
     },
