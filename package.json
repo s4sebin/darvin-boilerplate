@@ -55,6 +55,7 @@
     "html-webpack-plugin": "^3.2.0",
     "husky": "1.1.2",
     "image-webpack-loader": "^4.6.0",
+    "leader-line": "^1.0.5",
     "lint-staged": "7.3.0",
     "mini-css-extract-plugin": "^0.4.1",
     "node-sass": "^4.9.2",
@@ -76,7 +77,6 @@
   },
   "dependencies": {
     "@unic/composite-observer": "0.0.10",
-    "jsplumb": "^2.9.0",
     "markdown-it": "^8.4.2",
     "markdown-loader": "^5.0.0",
     "mdn-polyfills": "^5.9.0",

@@ -18,7 +18,7 @@
               <div class="prev-m-index__metalbl prev-m-index__lastupdate" data-update>&nbsp;</div>
             </div>
             <div class="prev-m-index__itemrow">
-              <a class="prev-m-index__minibtn" data-dep><i class="i i-target"></i></a>
+              <a class="prev-m-index__minibtn" data-dep @click="getDep"><i class="i i-target"></i></a>
               <a v-if="item.config.design" class="prev-m-index__speclink prev-m-index__speclink--design" :href="item.config.design" target="_blank">D</a>
               <a v-if="item.config.jira" class="prev-m-index__speclink prev-m-index__speclink--jira" :href="item.config.jira" target="_blank">J</a>
               <a v-if="item.config.confluence" class="prev-m-index__speclink prev-m-index__speclink--confluence" :href="item.config.confluence" target="_blank">C</a>
@@ -34,15 +34,9 @@
     import { mapActions, mapState } from 'vuex';
     import axios from 'axios';
 
-    let j = require("jsplumb/dist/js/jsplumb.js").jsPlumb.getInstance({
-      Connector: ["Bezier", {curviness: 100, stub: 10}, {cssClass:"connectorClass", lineWidth:2, strokeStyle:'blue'}],
-      Anchor: "Bottom",
-      endpoint:[ "Dot", { radius: 1 } ],
-      ConnectionOverlays: [
-        [ "Arrow", { location: 0, width: 10, length: 7, foldbackPoint: 0.62, direction:-1 }]
-    ]
-    });
+    import { LeaderLine } from "../../libs/leader-line";
 
+    let leaderline = LeaderLine();
     let bodyStyle = getComputedStyle(document.body);
 
     let settings = {
@@ -60,7 +54,7 @@
     timer,
     canvas,
     colors = ['#e8175d','#e8175d'],
-    anchors = [["Top", "Top"], ["Bottom", "Bottom"]],
+    anchors = [["Bottom", "Top"], ["Bottom", "Bottom"]],
     moduleCards;
 
     export default {
@@ -132,22 +126,12 @@
 
               counter++;
 
-              let settings = {
-                paintStyle:{
-                  stroke: colors[counter%2],
-                  strokeWidth:2,
-                  curviness: 300,
-                  stub: 20
-                },
-                anchors: anchors[counter%2],
-                endpoint:[ "Dot", { radius: 3 } ],
-                source: source,
-                target: target
-              };
-
-              j.connect(settings);
+              new leaderline(
+                source,
+                target,
+                {color: bodyStyle.getPropertyValue("--dependency-stroke"), size: 2, path: 'arc', startSocket: 'bottom', endSocket: 'bottom' }
+              )
             },
-
             updateLayout() {
                 settings.colors = {
                   grey1: bodyStyle.getPropertyValue("--activity-bg"),
@@ -159,6 +143,7 @@
             getDep() {
                axios.get('./' + this.type + '/' + this.name + '/log/dependencies.json')
                 .then((response) => {
+                  console.log(response.data);
                   this.dependencies = response.data.dependencies;
                 });
             },

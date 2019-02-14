@@ -16,7 +16,8 @@
             :class="{'is-flagged' : item.config.flag === true}"
             :data-name="item.name"
             :data-type="item.type"
-            :data-path="item.path">
+            :data-path="item.path"
+            :id="item.name">
             <card-item @updated="onCardUpdated" :name="item.name" :type="item.type" :item="item" :facets="facets">
                 <span slot="name">{{ item.name }}</span>
             </card-item>
