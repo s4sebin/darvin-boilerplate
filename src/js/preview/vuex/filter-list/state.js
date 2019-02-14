@@ -1,8 +1,8 @@
-let mode = false;
+let darkmode = false;
 
 if(localStorage.getItem("darvin-darkmode")) {
   if(localStorage.getItem("darvin-darkmode")=='true') {
-    mode = true;
+    darkmode = true;
   }
 }
 
@@ -17,9 +17,9 @@ export default {
 
     isMobileVisible: false,
 
-    mode: mode,
+    darkmode: darkmode,
 
     dependencies: [],
 
-    ready: [],
+    registeredLayouts: [],
 }

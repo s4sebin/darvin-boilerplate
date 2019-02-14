@@ -14,16 +14,16 @@ export default {
         state.search = search;
     },
 
-    [types.SET_MODE](state, { mode }) {
-        state.mode = mode;
+    [types.SET_DARKMODE](state, { darkmode }) {
+        state.darkmode = darkmode;
     },
 
     [types.SET_DEPENDENCIES](state, { dependencies }) {
       state.dependencies = dependencies;
     },
 
-    [types.SET_READY](state, { ready }) {
-      state.ready = ready;
+    [types.SET_REGISTERLAYOUT](state, { registeredLayouts }) {
+      state.registeredLayouts = registeredLayouts;
    },
 
     [types.SET_ACTIVITY](state, { activity }) {

@@ -28,137 +28,117 @@
 </template>
 
 <script>
-    import isotope from 'vueisotope';
-    import FuzzySet from 'fuzzyset.js'
-    import { mapActions, mapState } from 'vuex';
+  import isotope from 'vueisotope';
+  import FuzzySet from 'fuzzyset.js'
+  import { mapActions, mapState } from 'vuex';
 
-    import facetMixin from '../libs/vue/facetMixin';
-    import debounce from 'lodash.debounce';
+  import facetMixin from '../libs/vue/facetMixin';
+  import debounce from 'lodash.debounce';
 
-    export default {
-        components: { isotope },
-        mixins: [facetMixin('card-list')],
-        props: {
+  export default {
+    components: { isotope },
+    mixins: [facetMixin('card-list')],
+    props: {
+      category: {
+        type: String,
+      },
+      items: {
+        type: Array,
+        default: () => [],
+      },
+      title: {
+        type: String,
+        default: '',
+      },
+      sortOption: {
+        type: String,
+        default: 'id',
+      }
+    },
 
-            category: {
-              type: String,
+    data() {
+      return {
+        masonry: null,
+        arr1d: [],
+        isMounted: false,
+        highestElement: null,
+        list: this.items,
+        addedItems: [],
+        options: {
+          getSortData: {
+              name: "name",
+              id: "id"
+          },
+          sortBy : "name",
+          getFilterData: {
+            "show all": function(el) {
+              return true;
             },
+            "search": (el) => {
+              let fuzzySet = FuzzySet(),
+                  fuzzyCheck;
 
-            /**
-             * @type {CardItem[]}
-             */
-            items: {
-              type: Array,
-              default: () => [],
-            },
+              fuzzySet.add(this.search);
+              fuzzyCheck = fuzzySet.get(el.name);
 
-            title: {
-              type: String,
-              default: '',
-            },
-
-            sortOption: {
-              type: String,
-              default: 'id',
-            }
-        },
-
-        data() {
-          return {
-            masonry: null,
-            arr1d: [],
-            isMounted: false,
-            highestElement: null,
-            list: this.items,
-            addedItems: [],
-            options: {
-              getSortData: {
-                  name: "name",
-                  id: "id"
-              },
-              sortBy : "name",
-              getFilterData: {
-                "show all": function(el) {
-                  return true;
-                },
-                "search": (el) => {
-                  let a = FuzzySet();
-                  a.add(this.search);
-
-                  let fuzzyCheck = a.get(el.name);
-
-                  if(!fuzzyCheck) {
-                    return el.name.includes(this.search)
-                  }
-
-                  if(fuzzyCheck[0][0]>0.2) {
-                    return true;
-                  }
-
-                  return false;
-                },
-                "dependencies": (el) => {
-                  if(this.arr1d.includes(el.path)) {
-                    return true
-                  }
-
-                  return false;
-                },
+              if(!fuzzyCheck) {
+                return el.name.includes(this.search)
               }
-            }
-          };
-        },
 
-        computed: {
-          ...mapState('filter-list', ['search']),
-          ...mapState('filter-list', ['dependencies']),
-          ...mapState('filter-list', ['ready']),
-        },
+              if(fuzzyCheck[0][0]>0.2) {
+                return true;
+              }
 
-        methods: {
-          ...mapActions('filter-list', ['setReady']),
+              return false;
+            },
+            "dependencies": (el) => {
+              if(this.arr1d.includes(el.path)) {
+                return true
+              }
 
-          onCardUpdated() {
-              this.$nextTick(() => {
-                  if(this.$refs.isotope) this.$refs.isotope.arrange();
-              });
-          },
-          arrangeDone() {
-            console.log('ARRANGE REAADY');
-
-            if(this.ready) {
-              var arr = this.ready.slice(0);
-              arr.push(this.title);
-              this.setReady({ ready: arr });
-            }
+              return false;
+            },
           }
-        },
-
-        beforeDestroy() {
-            this.isMounted = false;
-        },
-
-        watch: {
-          items() {
-            console.log("items changed in " + this.title);
-          },
-          search() {
-            this.$refs.isotope.filter('search');
-          },
-          dependencies() {
-            let mapArr = this.dependencies.map(dep => ( [ dep.name, dep.parent ] )) ;
-            this.arr1d = [].concat(...mapArr);
-
-            this.$refs.isotope.iso.once('arrangeComplete', ()=>{
-              this.arrangeDone();
-            });
-
-            this.$refs.isotope.filter('dependencies');
-          },
-        },
-
-        mounted() {
-          this.isMounted = true;
         }
-    };
+      };
+    },
+
+    computed: {
+      ...mapState('filter-list', ['search']),
+      ...mapState('filter-list', ['dependencies']),
+      ...mapState('filter-list', ['registeredLayouts']),
+    },
+
+    methods: {
+      ...mapActions('filter-list', ['setListLayoutReady']),
+
+      onCardUpdated() {
+        this.$nextTick(() => {
+            if(this.$refs.isotope) this.$refs.isotope.arrange();
+        });
+      },
+      onLayoutReady() {
+        // register layout state as ready
+        var arr = this.registeredLayouts.slice(0);
+        arr.push(this.title);
+        this.setListLayoutReady({ registeredLayouts: arr });
+      }
+    },
+
+    watch: {
+      search() {
+        this.$refs.isotope.filter('search');
+      },
+      dependencies() {
+        let mapArr = this.dependencies.map(dep => ( [ dep.name, dep.parent ] )) ;
+        this.arr1d = [].concat(...mapArr);
+
+        this.$refs.isotope.iso.once('arrangeComplete', ()=>{
+          this.onLayoutReady();
+        });
+
+        this.$refs.isotope.filter('dependencies');
+      },
+    },
+  };
 </script>

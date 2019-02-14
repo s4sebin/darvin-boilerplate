@@ -1,9 +1,9 @@
 <template>
-    <div class="card-index prev-m-index" :class="['prev-m-index__index--' + counter, rootClasses]">
+    <div class="card-index prev-m-index" :class="['prev-m-index__index--' + layoutCounter, rootClasses]">
 
         <template v-for="(filteredCategory, i) in filteredCategories" >
           <div class="prev-m-index__col" :class="['prev-m-index__col--' + i]" :key="i">
-            <card-list class="prev-m-index__category" :facets="facets" :key="i" :title="i" :items="filteredCategory" v-if="isLoaded"/>
+            <card-list class="prev-m-index__category" :facets="facets" :key="i" :title="i" :items="filteredCategory" v-if="dataReady"/>
           </div>
         </template>
     </div>
@@ -11,146 +11,138 @@
 
 <script>
 
-    import { mapActions, mapState } from 'vuex';
-    import axios from 'axios';
+  import { mapActions, mapState } from 'vuex';
+  import axios from 'axios';
+  import facetMixin from '../libs/vue/facetMixin';
+  import { filterCategories } from './helpers';
+  import { LeaderLine } from "../libs/leader-line";
 
-    import facetMixin from '../libs/vue/facetMixin';
-    import { filterCategories } from './helpers';
+  let leaderline = LeaderLine(),
+      bodyStyle = getComputedStyle(document.body);
 
-    import { LeaderLine } from "../libs/leader-line";
+  export default {
+      mixins: [facetMixin('card-index')],
+      props: {},
+      data() {
+        return {
+          dataReady: false,
+          items: {},
+          categories: [],
+          layoutCounter: 0,
+          activity: {},
+          dependencyPaths: []
+        };
+      },
+      computed: {
+        ...mapState('filter-list', ['selectedFilter']),
+        ...mapState('filter-list', ['darkmode']),
+        ...mapState('filter-list', ['registeredLayouts']),
+        ...mapState('filter-list', ['dependencies']),
 
-    let leaderline = LeaderLine();
-    let bodyStyle = getComputedStyle(document.body);
+        filteredCategories() {
+          if (!this.dataReady) {
+              return null;
+          }
 
-    export default {
-        mixins: [facetMixin('card-index')],
-        props: {
+          let filteredCategories = filterCategories(this.items, this.selectedFilter);
 
+          this.$children.forEach((child) => {
+            this.$nextTick(function() {
+              child.onCardUpdated();
+            });
+          });
+
+          this.layoutCounter = Object.keys(filteredCategories).length;
+
+          return filteredCategories;
         },
-        data() {
-            return {
-                isLoaded: false,
-                /**
-                 * @type {FilterableTile[]}
-                 */
-                items: {},
+      },
+      methods: {
+        ...mapActions('filter-list', ['setFilters', 'setSelectedFilter']),
+        ...mapActions('filter-list', ['setSearch']),
+        ...mapActions('filter-list', ['setActivity']),
+        ...mapActions('filter-list', ['setListLayoutReady']),
 
-                /**
-                 * @type {CategoryFilter[]}
-                 */
-                categories: [],
+        initDependencyPaths() {
+          window.addEventListener("resize", () => {
+            /*this.dependencyPaths.forEach((line) => {
+              line.position();
+            });*/
+          });
 
-                counter: 0,
-
-                activity: {}
-            };
-        },
-
-        computed: {
-            ...mapState('filter-list', ['selectedFilter']),
-            ...mapState('filter-list', ['mode']),
-            ...mapState('filter-list', ['ready']),
-            ...mapState('filter-list', ['dependencies']),
-            filteredCategories() {
-                if (!this.isLoaded) {
-                    return null;
-                }
-
-                let filteredCategories = filterCategories(this.items, this.selectedFilter);
-
-                this.$children.forEach((child) => {
-                  this.$nextTick(function() {
-                    child.onCardUpdated();
-                  });
-                });
-
-                this.counter = Object.keys(filteredCategories).length;
-
-                return filteredCategories;
-            },
-
-
-        },
-
-        methods: {
-            ...mapActions('filter-list', ['setFilters', 'setSelectedFilter']),
-            ...mapActions('filter-list', ['setSearch']),
-            ...mapActions('filter-list', ['setActivity']),
-            ...mapActions('filter-list', ['setReady']),
-
-            paintLines() {
-              console.log("-- PAINT LINES --");
-
-              this.dependencies.forEach((dependency) => {
-                this.connect(dependency.parent, dependency.name);
-              });
-            },
-
-            connect(source, target) {
-
-              source = document.querySelector('.prev-m-index__item[data-path="' + source + '"]');
-              target = document.querySelector('.prev-m-index__item[data-path="' + target + '"]');
-
-              console.log(source);
-              console.log(target);
-
-              new leaderline(
-                source,
-                target,
-                {color: bodyStyle.getPropertyValue("--dependency-stroke"), size: 2, path: 'arc', startSocket: 'bottom', endSocket: 'bottom' }
-              )
-            },
-
-            loadData() {
-
-                let data = window.darvinPayload;
-                this.categories = Object.keys(data);
-
-                this.items = {};
-
-                this.categories.forEach((category) => {
-                  this.items[category] = Object.keys(data[category]).map((k) => data[category][k]);
-                });
-
-                this.setFilters({ filters: this.categories });
-                this.setSelectedFilter({ filter: this.categories });
-                this.setSearch({ search: ''});
-
-                this.$root.$children.forEach((children) => {
-                  if(children.$el.classList.contains('prev-m-filterbar')) {
-                    children.categoryFilter = this.categories;
-                  }
-                });
-
-                axios.get('./log/activity-visualizer.json')
-                  .then((response) => {
-                      this.setActivity({ activity: response.data});
-                      this.isLoaded = true;
-                  });
-
-            }
+          this.dependencies.forEach((dependency) => {
+            this.createDependencyPath(dependency.parent, dependency.name);
+          });
         },
 
-        watch: {
-            mode() {
-              document.body.classList.toggle('darkmode');
-            },
-            dependencies() {
-              // set callback array and wait for ready events
-              this.setReady({ ready: [] });
-            },
-            ready() {
-              if(this.ready.length === Object.keys(this.filteredCategories).length) {
-                console.log("-> all lists are arranged");
-                this.paintLines();
-              }
-            },
+        removeDependencyPaths() {
+          this.dependencyPaths.forEach((line) => {
+            line.remove();
+          });
         },
 
-        mounted() {
-            this.loadData();
+        updateDependencyPaths() {
+          this.dependencyPaths.forEach((line) => {
+            line.position();
+          });
         },
 
+        createDependencyPath(source, target) {
+          source = document.querySelector('.prev-m-index__item[data-path="' + source + '"]');
+          target = document.querySelector('.prev-m-index__item[data-path="' + target + '"]');
 
-    };
+          this.dependencyPaths.push(new leaderline(
+            source,
+            target,
+            {color: bodyStyle.getPropertyValue("--dependency-stroke"), size: 1.5, endPlugSize: 2,  path: 'arc', startSocket: 'bottom', endSocket: 'bottom' }
+          ));
+        },
+
+        payload() {
+          let data = window.darvinPayload;
+
+          this.items = {};
+          this.categories = Object.keys(data);
+
+          // map categorys to array
+          this.categories.forEach((category) => {
+            this.items[category] = Object.keys(data[category]).map((k) => data[category][k]);
+          });
+
+          // set filter
+          this.setFilters({ filters: this.categories });
+          this.setSelectedFilter({ filter: this.categories });
+
+          // set search
+          this.setSearch({ search: ''});
+
+          axios.get('./log/activity-visualizer.json')
+            .then((response) => {
+                this.setActivity({ activity: response.data});
+                this.dataReady = true;
+            });
+        }
+      },
+      watch: {
+        darkmode() {
+          document.body.classList.toggle('darkmode');
+        },
+        dependencies() {
+          // reset drawn paths
+          this.removeDependencyPaths();
+
+          // set callback array and wait for registeredLayouts events
+          this.setListLayoutReady({ registeredLayouts: [] });
+        },
+        registeredLayouts() {
+          if(this.registeredLayouts.length === Object.keys(this.filteredCategories).length) {
+            // all layouts are arranged
+            this.initDependencyPaths();
+          }
+        },
+      },
+      mounted() {
+        this.payload();
+      }
+  };
 </script>

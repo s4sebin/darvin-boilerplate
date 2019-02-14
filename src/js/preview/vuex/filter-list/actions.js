@@ -12,16 +12,16 @@ export function setSearch({ commit }, { search }) {
   commit(types.SET_SEARCH, { search });
 }
 
-export function setMode({ commit }, { mode }) {
-  commit(types.SET_MODE, { mode });
+export function setDarkmode({ commit }, { darkmode }) {
+  commit(types.SET_DARKMODE, { darkmode });
 }
 
 export function setDependencies({ commit }, { dependencies }) {
   commit(types.SET_DEPENDENCIES, { dependencies });
 }
 
-export function setReady({ commit }, { ready }) {
-  commit(types.SET_READY, { ready });
+export function setListLayoutReady({ commit }, { registeredLayouts }) {
+  commit(types.SET_REGISTERLAYOUT, { registeredLayouts });
 }
 
 export function setActivity({ commit }, { activity }) {

@@ -29,237 +29,236 @@
 </template>
 
 <script>
+  import facetMixin from '../../libs/vue/facetMixin';
+  import { mapActions, mapState } from 'vuex';
+  import axios from 'axios';
 
-    import facetMixin from '../../libs/vue/facetMixin';
-    import { mapActions, mapState } from 'vuex';
-    import axios from 'axios';
+  let bodyStyle = getComputedStyle(document.body);
 
-    let bodyStyle = getComputedStyle(document.body);
+  let settings = {
+    days: 20,
+    height: 100,
+    width: 360,
+    maxHeight: '80',
+    colors: {
+      grey1: bodyStyle.getPropertyValue("--activity-bg"),
+      grey2: bodyStyle.getPropertyValue("--activity-grid"),
+      grey3: bodyStyle.getPropertyValue("--activity-graph")
+    }
+  },
+  counter = 0,
+  timer,
+  canvas,
+  colors = ['#e8175d','#e8175d'],
+  anchors = [["Bottom", "Top"], ["Bottom", "Bottom"]],
+  moduleCards;
 
-    let settings = {
-      days: 20,
-      height: 100,
-      width: 360,
-      maxHeight: '80',
-      colors: {
-        grey1: bodyStyle.getPropertyValue("--activity-bg"),
-        grey2: bodyStyle.getPropertyValue("--activity-grid"),
-        grey3: bodyStyle.getPropertyValue("--activity-graph")
-      }
+  export default {
+    mixins: [facetMixin('card-item')],
+
+    props: {
+        largestHeight: {
+            type: Number,
+            default: null,
+        },
+        name: {
+            type: String
+        },
+        type: {
+            type: String
+        },
+        item: {
+            type: Object
+        },
     },
-    counter = 0,
-    timer,
-    canvas,
-    colors = ['#e8175d','#e8175d'],
-    anchors = [["Bottom", "Top"], ["Bottom", "Bottom"]],
-    moduleCards;
 
-    export default {
-        mixins: [facetMixin('card-item')],
+    data() {
+        return {
+            isOpen: false,
+            hasDescription: true,
+            deltaArr: [],
+            pointArr: [],
+            valArr: new Array(20),
+            timer: {},
+            counter: 0,
+            dependencies: []
+        };
+    },
 
-        props: {
-            largestHeight: {
-                type: Number,
-                default: null,
-            },
-            name: {
-                type: String
-            },
-            type: {
-                type: String
-            },
-            item: {
-                type: Object
-            },
-        },
+    computed: {
+      ...mapState('filter-list', ['activity']),
+      ...mapState('filter-list', ['darkmode']),
 
-        data() {
-            return {
-                isOpen: false,
-                hasDescription: true,
-                deltaArr: [],
-                pointArr: [],
-                valArr: new Array(20),
-                timer: {},
-                counter: 0,
-                dependencies: []
-            };
-        },
+      cardActivity() {
+          return this.activity[this.name]
+      },
+    },
 
-        computed: {
-            ...mapState('filter-list', ['activity']),
-            ...mapState('filter-list', ['mode']),
+    watch: {
+      dependencies() {
+          this.prepareData();
+      },
+      descr() {
+          this.hasDescription = false;
+      },
+      darkmode() {
+          console.log("ITEM MODE CHANGE");
+          this.updateLayout();
+      },
+    },
 
-            cardActivity() {
-                return this.activity[this.name]
-            },
-        },
+    methods: {
+      ...mapActions('filter-list', ['setDependencies']),
 
-        watch: {
-            dependencies() {
-                this.prepareData();
-            },
-            descr() {
-                this.hasDescription = false;
-            },
-            mode() {
-                console.log("ITEM MODE CHANGE");
-                this.updateLayout();
-            },
-        },
+      prepareData() {
+        document.body.classList.add('dependency-darkmode');
 
-        methods: {
-            ...mapActions('filter-list', ['setDependencies']),
+        this.setDependencies({ dependencies: this.dependencies });
 
-            prepareData() {
-                document.body.classList.add('dependency-mode');
-              this.setDependencies({ dependencies: this.dependencies });
+        /*this.dependencies.forEach((dependency) => {
+          this.connect(dependency.parent, dependency.name);
+        });*/
+      },
+      updateLayout() {
+        settings.colors = {
+          grey1: bodyStyle.getPropertyValue("--activity-bg"),
+          grey2: bodyStyle.getPropertyValue("--activity-grid"),
+          grey3: bodyStyle.getPropertyValue("--activity-graph")
+        };
+        this.draw(this.$el.querySelector('canvas').getContext('2d'), this.name, 1);
+      },
+      getDep() {
+        axios.get('./' + this.type + '/' + this.name + '/log/dependencies.json')
+        .then((response) => {
+          console.log(response.data);
+          this.dependencies = response.data.dependencies;
+        });
+      },
+      initVisualizer() {
+        let name = this.name;
+        let el = this.$el;
+        let data = this.activity[this.name];
 
-              /*this.dependencies.forEach((dependency) => {
-                this.connect(dependency.parent, dependency.name);
-              });*/
-            },
-            updateLayout() {
-                settings.colors = {
-                  grey1: bodyStyle.getPropertyValue("--activity-bg"),
-                  grey2: bodyStyle.getPropertyValue("--activity-grid"),
-                  grey3: bodyStyle.getPropertyValue("--activity-graph")
-                };
-                this.draw(this.$el.querySelector('canvas').getContext('2d'), this.name, 1);
-            },
-            getDep() {
-               axios.get('./' + this.type + '/' + this.name + '/log/dependencies.json')
-                .then((response) => {
-                  console.log(response.data);
-                  this.dependencies = response.data.dependencies;
-                });
-            },
-            initVisualizer() {
-                let name = this.name;
-                let el = this.$el;
-                let data = this.activity[this.name];
+        let canvas = el.querySelector('canvas');
 
-                let canvas = el.querySelector('canvas');
+        let ctx = canvas.getContext('2d');
 
-                let ctx = canvas.getContext('2d');
+        // loop trough the last 20 days
+        for (var i = 0; i < settings.days; i++) {
+          let calcDay = new Date(new Date().getTime() - (i * 24 * 60 * 60 * 1000)).toISOString().split('T')[0];
+          this.valArr[i] = ('0'); // default zero
 
-                // loop trough the last 20 days
-                for (var i = 0; i < settings.days; i++) {
-                  let calcDay = new Date(new Date().getTime() - (i * 24 * 60 * 60 * 1000)).toISOString().split('T')[0];
-                  this.valArr[i] = ('0'); // default zero
+          // search for matching commits
+          for (var j = 0; j < data.all.length; j++) {
+            if (data.all[j].date.split(' ')[0] == calcDay) {
+              this.valArr[i] = parseInt(this.valArr[i]) + 10;
 
-                  // search for matching commits
-                  for (var j = 0; j < data.all.length; j++) {
-                    if (data.all[j].date.split(' ')[0] == calcDay) {
-                      this.valArr[i] = parseInt(this.valArr[i]) + 10;
-
-                      if (parseInt(this.valArr[i]) > 80) {
-                        this.valArr[i] = settings.maxHeight;
-                      }
-                    }
-                  }
-                }
-
-                this.valArr.reverse();
-
-                if (data.latest) {
-                  let latestCommitSplits = data.latest.date.split(' ');
-                  let flagRangeStart = new Date(new Date().getTime() - (2 * 24 * 60 * 60 * 1000));
-                  let flagRangeEnd = new Date(latestCommitSplits[0]);
-
-                  if (flagRangeEnd >= flagRangeStart) {
-                    el.querySelector('.prev-c-led').classList.add('prev-c-led--green');
-                  }
-
-                  el.querySelector('.prev-m-index__lastupdate[data-update]').innerHTML = latestCommitSplits[0] + ' <span>' + latestCommitSplits[1] + '</span>';
-                } else {
-                  el.querySelector('.prev-c-led').classList.add('prev-c-led--blue');
-                  el.querySelector('.prev-m-index__lastupdate[data-update]').innerHTML = 'New Module';
-                }
-
-
-                this.timer = setInterval(() => {
-                  this.draw(ctx, name, 60);
-                }, 30);
-
-            },
-            draw(ctx, name, killSwitch) {
-               if(this.counter == killSwitch) {
-                // kill draw intervall
-                clearInterval(this.timer);
-                this.counter++;
-              }  else if(this.counter < killSwitch) {
-                this.counter++;
+              if (parseInt(this.valArr[i]) > 80) {
+                this.valArr[i] = settings.maxHeight;
               }
-
-              ctx.fillStyle = settings.colors.grey1;
-              ctx.strokeStyle = settings.colors.grey2;
-              ctx.save();
-              this.drawGrid(ctx, settings.width, settings.height, 10, 10);
-
-              for (let i = 0; i < this.valArr.length; i++) {
-                if (isNaN(this.pointArr[i])) {
-                  this.pointArr[i] = settings.height;
-                }
-
-                ctx.lineWidth = 1;
-                let larg = (settings.width - 20) / (this.valArr.length - 1);
-                this.deltaArr[i] = (settings.height - this.valArr[i]) - this.pointArr[i];
-                this.pointArr[i] += this.deltaArr[i] / (i + 10);
-
-                ctx.strokeStyle = settings.colors.grey1;
-                ctx.fillStyle = settings.colors.grey3;
-                this.drawingLines(ctx, larg, this.pointArr, i);
-              }
-            },
-            drawingLines(ctx, width, points, i) {
-              ctx.beginPath();
-              ctx.globalAlpha = i * 0.04;
-              ctx.moveTo(((i - 1) * width + 10), points[i - 1]);
-              ctx.lineTo(i * width + 10, points[i]);
-              ctx.lineTo(i * width + 10, settings.height);
-              ctx.lineTo(((i - 1) * width + 10), settings.height);
-              ctx.lineTo(((i - 1) * width + 10), points[i - 1]);
-              ctx.fill();
-              ctx.beginPath();
-              ctx.globalAlpha = 1;
-              ctx.moveTo(((i - 1) * width + 10), points[i - 1]);
-              ctx.lineTo(i * width + 10, points[i]);
-              ctx.stroke();
-              ctx.beginPath();
-              ctx.save();
-              ctx.fillStyle = ctx.strokeStyle;
-              ctx.arc(i * width + 10, points[i], 2, 0, Math.PI * 2)
-              ctx.fill();
-              ctx.restore();
-            },
-            drawGrid(ctx, width, height, colun, line) {
-              ctx.fillRect(0, 0, width, height);
-              ctx.save();
-              for (var i = 1; i < (width / colun); i++) {
-                ctx.beginPath();
-                ctx.moveTo(i * colun, 0);
-                ctx.lineTo(i * colun, height);
-                ctx.stroke();
-              }
-              for (var l = 1; l < (height / line); l++) {
-                ctx.beginPath();
-                ctx.moveTo(0, l * line);
-                ctx.lineTo(width, l * line);
-                ctx.stroke();
-              }
-            },
-        },
-
-        mounted() {
-          this.counter = 0;
-          this.initVisualizer();
-
-          // darkmode
-          if(this.mode) {
-            this.updateLayout();
+            }
           }
         }
 
-    };
+        this.valArr.reverse();
+
+        if (data.latest) {
+          let latestCommitSplits = data.latest.date.split(' ');
+          let flagRangeStart = new Date(new Date().getTime() - (2 * 24 * 60 * 60 * 1000));
+          let flagRangeEnd = new Date(latestCommitSplits[0]);
+
+          if (flagRangeEnd >= flagRangeStart) {
+            el.querySelector('.prev-c-led').classList.add('prev-c-led--green');
+          }
+
+          el.querySelector('.prev-m-index__lastupdate[data-update]').innerHTML = latestCommitSplits[0] + ' <span>' + latestCommitSplits[1] + '</span>';
+        } else {
+          el.querySelector('.prev-c-led').classList.add('prev-c-led--blue');
+          el.querySelector('.prev-m-index__lastupdate[data-update]').innerHTML = 'New Module';
+        }
+
+
+        this.timer = setInterval(() => {
+          this.draw(ctx, name, 60);
+        }, 30);
+
+      },
+      draw(ctx, name, killSwitch) {
+        if(this.counter == killSwitch) {
+          // kill draw intervall
+          clearInterval(this.timer);
+          this.counter++;
+        }  else if(this.counter < killSwitch) {
+          this.counter++;
+        }
+
+        ctx.fillStyle = settings.colors.grey1;
+        ctx.strokeStyle = settings.colors.grey2;
+        ctx.save();
+        this.drawGrid(ctx, settings.width, settings.height, 10, 10);
+
+        for (let i = 0; i < this.valArr.length; i++) {
+          if (isNaN(this.pointArr[i])) {
+            this.pointArr[i] = settings.height;
+          }
+
+          ctx.lineWidth = 1;
+          let larg = (settings.width - 20) / (this.valArr.length - 1);
+          this.deltaArr[i] = (settings.height - this.valArr[i]) - this.pointArr[i];
+          this.pointArr[i] += this.deltaArr[i] / (i + 10);
+
+          ctx.strokeStyle = settings.colors.grey1;
+          ctx.fillStyle = settings.colors.grey3;
+          this.drawingLines(ctx, larg, this.pointArr, i);
+        }
+      },
+      drawingLines(ctx, width, points, i) {
+        ctx.beginPath();
+        ctx.globalAlpha = i * 0.04;
+        ctx.moveTo(((i - 1) * width + 10), points[i - 1]);
+        ctx.lineTo(i * width + 10, points[i]);
+        ctx.lineTo(i * width + 10, settings.height);
+        ctx.lineTo(((i - 1) * width + 10), settings.height);
+        ctx.lineTo(((i - 1) * width + 10), points[i - 1]);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.globalAlpha = 1;
+        ctx.moveTo(((i - 1) * width + 10), points[i - 1]);
+        ctx.lineTo(i * width + 10, points[i]);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.save();
+        ctx.fillStyle = ctx.strokeStyle;
+        ctx.arc(i * width + 10, points[i], 2, 0, Math.PI * 2)
+        ctx.fill();
+        ctx.restore();
+      },
+      drawGrid(ctx, width, height, colun, line) {
+        ctx.fillRect(0, 0, width, height);
+        ctx.save();
+        for (var i = 1; i < (width / colun); i++) {
+          ctx.beginPath();
+          ctx.moveTo(i * colun, 0);
+          ctx.lineTo(i * colun, height);
+          ctx.stroke();
+        }
+        for (var l = 1; l < (height / line); l++) {
+          ctx.beginPath();
+          ctx.moveTo(0, l * line);
+          ctx.lineTo(width, l * line);
+          ctx.stroke();
+        }
+      },
+    },
+
+    mounted() {
+      this.counter = 0;
+      this.initVisualizer();
+
+      // darkmode
+      if(this.darkmode) {
+        this.updateLayout();
+      }
+    }
+  };
 </script>
