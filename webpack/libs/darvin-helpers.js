@@ -26,7 +26,7 @@ prepareDependencies = async (file, type) => {
   let env = nunjucks.configure(`./src/templates`);
   let { dependencies } = await parseFile(env, `${type}/${file}/${file}.njk`);
 
-  let removeIndex = 0;
+  let selfIndex = 0;
   let obj = {
     dependencies: dependencies
   }
@@ -45,18 +45,20 @@ prepareDependencies = async (file, type) => {
             dependency[key] = dependency[key].substring(0, dependency[key].lastIndexOf("/"));
           }
         }
-
       }
     }
 
     // remove own dep
     if (dependency['name'] == `${type}/${file}`) {
-      removeIndex = i;
+      selfIndex = i;
     }
 
   });
 
-  dependencies.splice(removeIndex, 1);
+  dependencies.splice(selfIndex, 1);
+
+  // remove layouts
+  dependencies = dependencies.filter(dependency => !dependency.name.includes('layouts/'));
 
   if (!fs.existsSync(`./src/templates/${type}/${file}/log`)){
     fs.mkdirSync(`./src/templates/${type}/${file}/log`);

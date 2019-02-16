@@ -13,7 +13,7 @@
           <div v-for="item in list"
             :key="item.id"
             class="gradient-border"
-            :class="{'is-flagged' : item.config.flag === true}"
+            :class="{'is-flagged' : dependencies.length > 1}"
             :data-name="item.name"
             :data-type="item.type"
             :data-path="item.path"
@@ -133,7 +133,12 @@
         let mapArr = this.dependencies.map(dep => ( [ dep.name, dep.parent ] )) ;
         this.arr1d = [].concat(...mapArr);
 
-        this.$refs.isotope.iso.once('arrangeComplete', ()=>{
+        if(this.arr1d.length<1) {
+          this.$refs.isotope.filter('show all');
+          return;
+        }
+
+        this.$refs.isotope.iso.once('layoutComplete', ()=>{
           this.onLayoutReady();
         });
 

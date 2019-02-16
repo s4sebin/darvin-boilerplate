@@ -1,13 +1,14 @@
 <template>
     <div class="card-index prev-m-index" :class="['prev-m-index__index--' + layoutCounter, rootClasses]">
 
-        <template v-for="(filteredCategory, i) in filteredCategories" >
-          <div class="prev-m-index__col" :class="['prev-m-index__col--' + i]" :key="i">
-            <card-list class="prev-m-index__category" :facets="facets" :key="i" :title="i" :items="filteredCategory" v-if="dataReady"/>
+        <template v-for="(filteredCategory, name) in filteredCategories" >
+          <div class="prev-m-index__col" :class="['prev-m-index__col--' + name]" :key="name">
+            <card-list class="prev-m-index__category" :facets="facets" :key="name" :title="name" :items="filteredCategory" v-if="dataReady"/>
           </div>
         </template>
     </div>
 </template>
+
 
 <script>
 
@@ -54,7 +55,7 @@
 
           this.layoutCounter = Object.keys(filteredCategories).length;
 
-          return filteredCategories;
+          return this.ksort(filteredCategories);
         },
       },
       methods: {
@@ -62,6 +63,15 @@
         ...mapActions('filter-list', ['setSearch']),
         ...mapActions('filter-list', ['setActivity']),
         ...mapActions('filter-list', ['setListLayoutReady']),
+
+        ksort( src ) {
+          const keys = Object.keys( src );
+          keys.sort();
+          return keys.reduce(( target, key ) => {
+                target[ key ] = src[ key ];
+                return target;
+          }, {});
+        },
 
         initDependencyPaths() {
           window.addEventListener("resize", () => {
@@ -71,7 +81,9 @@
           });
 
           this.dependencies.forEach((dependency) => {
-            this.createDependencyPath(dependency.parent, dependency.name);
+            this.$nextTick(() => {
+              this.createDependencyPath(dependency.parent, dependency.name);
+            });
           });
         },
 
@@ -79,6 +91,7 @@
           this.dependencyPaths.forEach((line) => {
             line.remove();
           });
+          this.dependencyPaths = [];
         },
 
         updateDependencyPaths() {
@@ -91,11 +104,22 @@
           source = document.querySelector('.prev-m-index__item[data-path="' + source + '"]');
           target = document.querySelector('.prev-m-index__item[data-path="' + target + '"]');
 
+          if(!source) {
+            console.error("no source " + source);
+            return;
+          }
+
+          if(!target) {
+            console.error("no target " + target);
+            return;
+          }
+
           this.dependencyPaths.push(new leaderline(
             source,
             target,
             {color: bodyStyle.getPropertyValue("--dependency-stroke"), size: 1.5, endPlugSize: 2,  path: 'arc', startSocket: 'bottom', endSocket: 'bottom' }
           ));
+
         },
 
         payload() {
@@ -129,10 +153,14 @@
         },
         dependencies() {
           // reset drawn paths
-          this.removeDependencyPaths();
+          if(this.dependencies.length < 1) {
+            this.removeDependencyPaths();
+            this.setListLayoutReady({ registeredLayouts: [] });
+          }
+
 
           // set callback array and wait for registeredLayouts events
-          this.setListLayoutReady({ registeredLayouts: [] });
+          //this.setListLayoutReady({ registeredLayouts: [] });
         },
         registeredLayouts() {
           if(this.registeredLayouts.length === Object.keys(this.filteredCategories).length) {

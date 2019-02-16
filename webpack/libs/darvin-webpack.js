@@ -81,8 +81,9 @@ previewIndexObj.types.forEach((type) => {
       const jsPath = `./src/templates/${type}/${file}/main.js`;
       let name = `${type}/${file}/${file}`;
 
-      prepareDependencies(file, type);
-
+      if(type!='pages') {
+        prepareDependencies(file, type);
+      }
 
       // create entry if element js exist
       try {

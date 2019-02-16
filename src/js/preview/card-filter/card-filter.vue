@@ -1,6 +1,10 @@
 <template>
     <div class="prev-m-filterbar">
-      <div class="prev-m-filterbar__categories">
+      <div v-if="dependencies.length > 0" class="prev-m-filterbar__dependencymode">
+        <span>Dependency Mode</span>
+        <a tabindex="0" @click="resetDependencies"><i class="ico i-close"></i></a>
+      </div>
+      <div v-else class="prev-m-filterbar__categories">
         <div class="prev-m-filterbar__category prev-m-filterbar__checkbox" v-for="filter in filters" :key="filter.value">
           <input class="prev-m-filterbar__input"
             type="checkbox"
@@ -53,12 +57,18 @@
             ...mapState('filter-list', ['darkmode']),
             ...mapState('filter-list', ['selectedFilter']),
             ...mapState('filter-list', ['filters']),
+            ...mapState('filter-list', ['dependencies']),
         },
 
         methods: {
             ...mapActions('filter-list', ['setSelectedFilter']),
             ...mapActions('filter-list', ['setSearch']),
             ...mapActions('filter-list', ['setDarkmode']),
+            ...mapActions('filter-list', ['setDependencies']),
+
+            resetDependencies() {
+              this.setDependencies({ dependencies: [] });
+            }
         },
 
         watch: {

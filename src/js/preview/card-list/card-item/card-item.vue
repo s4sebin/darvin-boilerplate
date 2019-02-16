@@ -18,7 +18,7 @@
               <div class="prev-m-index__metalbl prev-m-index__lastupdate" data-update>&nbsp;</div>
             </div>
             <div class="prev-m-index__itemrow">
-              <a class="prev-m-index__minibtn" data-dep @click="getDep"><i class="i i-target"></i></a>
+              <a class="prev-m-index__minibtn" data-dep @click="getDep" v-if="this.dependencies.length < 1 && item.type != 'pages' && trigger"><i class="i i-target"></i></a>
               <a v-if="item.config.design" class="prev-m-index__speclink prev-m-index__speclink--design" :href="item.config.design" target="_blank">D</a>
               <a v-if="item.config.jira" class="prev-m-index__speclink prev-m-index__speclink--jira" :href="item.config.jira" target="_blank">J</a>
               <a v-if="item.config.confluence" class="prev-m-index__speclink prev-m-index__speclink--confluence" :href="item.config.confluence" target="_blank">C</a>
@@ -81,13 +81,16 @@
             valArr: new Array(20),
             timer: {},
             counter: 0,
-            dependencies: []
+            cardDependencies: [],
+            dependenciesLoaded: false,
+            trigger: true
         };
     },
 
     computed: {
       ...mapState('filter-list', ['activity']),
       ...mapState('filter-list', ['darkmode']),
+      ...mapState('filter-list', ['dependencies']),
 
       cardActivity() {
           return this.activity[this.name]
@@ -96,13 +99,15 @@
 
     watch: {
       dependencies() {
+        this.showDepTrigger();
+      },
+      cardDependencies() {
           this.prepareData();
       },
       descr() {
           this.hasDescription = false;
       },
       darkmode() {
-          console.log("ITEM MODE CHANGE");
           this.updateLayout();
       },
     },
@@ -110,12 +115,26 @@
     methods: {
       ...mapActions('filter-list', ['setDependencies']),
 
+      showDepTrigger() {
+        if(this.dependenciesLoaded && this.cardDependencies.length >= 1) {
+          if(this.dependencies.length > 1) {
+            this.trigger = false;
+          } else {
+             this.trigger = true;
+          }
+        } else if (!this.dependenciesLoaded && this.dependencies.length < 1) {
+          this.trigger = true;
+        } else {
+          this.trigger = false;
+        }
+      },
+
       prepareData() {
         document.body.classList.add('dependency-darkmode');
 
-        this.setDependencies({ dependencies: this.dependencies });
+        this.setDependencies({ dependencies: this.cardDependencies });
 
-        /*this.dependencies.forEach((dependency) => {
+        /*cardDependencies.forEach((dependency) => {
           this.connect(dependency.parent, dependency.name);
         });*/
       },
@@ -130,8 +149,8 @@
       getDep() {
         axios.get('./' + this.type + '/' + this.name + '/log/dependencies.json')
         .then((response) => {
-          console.log(response.data);
-          this.dependencies = response.data.dependencies;
+          this.cardDependencies = response.data.dependencies;
+          this.dependenciesLoaded = true
         });
       },
       initVisualizer() {
