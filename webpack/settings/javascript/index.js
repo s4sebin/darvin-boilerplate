@@ -16,6 +16,17 @@ const prod = {
 };
 
 const dev = {
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader'
+        },
+      },
+    ]
+  },
   resolve: {
     extensions: ['.js', '.json'],
   }

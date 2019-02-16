@@ -1,4 +1,4 @@
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const MiniCssExtractPlugin = require("extract-css-chunks-webpack-plugin");
 const autoprefixer = require('autoprefixer');
 
 const prod = {
@@ -40,6 +40,7 @@ const prod = {
   plugins: [
     new MiniCssExtractPlugin({
       filename: 'css/style.[contenthash].css',
+      hot: true
     }),
   ]
 };
@@ -82,12 +83,57 @@ const dev = {
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: 'css/style.[contenthash].css',
+      filename: 'css/style.css',
     }),
   ]
 }
 
+const prev = {
+  module: {
+    rules: [
+      {
+        test: /\.(css|sass|scss)$/,
+        use: [{
+          loader: MiniCssExtractPlugin.loader,
+        },
+        {
+          loader: 'css-loader',
+          options: {
+            sourceMap: true,
+            importLoaders: 2,
+          },
+        },
+        {
+          loader: 'postcss-loader',
+          options: {
+            plugins: () => [
+              autoprefixer({
+                flexbox: 'no-2009'
+              }),
+            ],
+            sourceMap: true,
+          },
+        },
+        {
+          loader: 'sass-loader',
+          options: {
+            sourceMap: true,
+          },
+        },
+        ],
+      },
+    ]
+  },
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: 'preview.css',
+    }),
+  ]
+}
+
+
 module.exports = {
   prod: prod,
-  dev: dev
+  dev: dev,
+  prev: prev
 };

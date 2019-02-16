@@ -16,8 +16,7 @@ let webpackEntryObj = {},
     },
     htmlTemplates = [],
     dir = path.resolve(basePath, 'src/templates'),
-    webpackEntryDefault = ['./src/js/base.js'],
-    webpackEntryDefaultPreview = ['./src/js/base.js', './src/js/preview.js'],
+    webpackEntryDefault = ['./src/js/main.js'],
     activityDays = 20,
     endDate = new Date(),
     startDate = new Date(endDate.getTime() - (activityDays * 24 * 60 * 60 * 1000));
@@ -86,7 +85,7 @@ previewIndexObj.types.forEach((type) => {
       }
 
       // create entry if element js exist
-      try {
+     /* try {
         if (fs.existsSync(jsPath)) {
           webpackEntryObj[name] = [];
 
@@ -100,7 +99,7 @@ previewIndexObj.types.forEach((type) => {
           // set chunk
           previewIndexObj.payload[type][file].chunkName = `${tmplPath}/${file}`;
         }
-      } catch (err) { }
+      } catch (err) { }*/
 
       // filter last commits from last days
       simpleGit.log({ 'file': `./src/templates/${type}/${file}/${file}.njk` }, (err, log) => {
@@ -129,7 +128,6 @@ previewIndexObj.types.forEach((type) => {
 
 // add default main and preview entry
 webpackEntryObj['js/main'] = webpackEntryDefault;
-webpackEntryObj['js/preview'] = webpackEntryDefaultPreview;
 
 if (!fs.existsSync('./log')){
   fs.mkdirSync('./log');

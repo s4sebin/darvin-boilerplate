@@ -27,16 +27,22 @@ const settings = {
   output: {
     devtoolLineToLine: false,
     // sourceMapFilename: '[name].js.map',
-    path: path.resolve(basePath, 'dist'),
+    path: path.resolve(basePath, 'dist/build'),
     pathinfo: false,
     filename: '[name].js',
     publicPath: '/'
   },
   devtool: 'cheap-module-eval-source-map',
-  watchOptions: {
-    aggregateTimeout: 300,
-    ignored: ['**/*.woff', '**/*.woff2', '**/*.jpg', '**/*.png', '**/*.svg', 'node_modules'],
-  },
+  devServer: {
+    contentBase: path.resolve(basePath, 'dist/build'),
+    compress: false,
+    port: 9000,
+    open: true,
+    watchContentBase: true,
+    watchOptions: {
+      ignored: ['**/*.woff', '**/*.woff2', '**/*.jpg', '**/*.png', '**/*.svg', 'node_modules'],
+    }
+  }
 };
 
-module.exports = merge(webpackConfig, settings, clean, copy, js, css, config, fonts, images, modernizr, nunjucks, vue, browserSync, sprites, markdown);
+module.exports = merge(webpackConfig, settings, clean, copy, js, css, config, fonts, images, modernizr, nunjucks, vue, sprites, markdown);
