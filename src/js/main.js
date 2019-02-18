@@ -10,5 +10,3 @@ import '../styles/main.scss';
 import './main.config';
 
 import '../templates/modules/m02-accordion/main.js';
-
-import '../templates/modules/m02-accordion/m02-accordion.preview.2.njk';

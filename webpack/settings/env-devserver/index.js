@@ -1,7 +1,7 @@
 const path = require('path');
 const basePath = process.cwd();
 
-let devServer = require('../../libs/devServerStorage');
+let devServer = require('../../libs/devserver-storage');
 
 const dev = {
   devServer: {

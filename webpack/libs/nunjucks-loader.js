@@ -10,7 +10,7 @@ const path = require('path');
 const nunjucks = require('nunjucks');
 const crypto = require('crypto');
 
-let devServer = require('./devServerStorage');
+let devServer = require('./devserver-storage');
 let cacheRegister = {};
 
 const NunjucksLoader = nunjucks.Loader.extend({
