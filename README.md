@@ -1,20 +1,18 @@
 ![](http://tobiasfrei.ch/github/darvin-boilerplate/darvin-MIT_(c)TobiasFrei.svg)
 
-Darvin is a webpack boilerplate for developing static sites based on components and modules. HTML rendering with Mozilla Nunjucks templating engine, ES201X transpiler and Sass precompiling with SVG sprites. Git hooks for csscomb and linting, custom modernizr functions and hot-reload with browsersync.
-Each build creates a preview for components, modules, assets and pagetypes. Preview elements are isolated by specific chunks. 
+create static HTML pages with preview. Suitable for the delivery of frontend prototypes.
 
-Preview Features:
-- Dependency Visualizer
-- Activity Chart
-- Source Preview
-- Element Readme
-
-Open:
-- Optimize pipelines
-- smoke test
-- prod pipeline
-- feature configs
-- design
+- Webpack Bundler
+- ES201X Transpiler
+- Mozilla Nunjucks HTML
+- Sass Precompiler
+- SVG Sprite Generator
+- Hot Module Replacement
+- Bundle Analyzer
+- i18n Configuration
+- Custom Modernizr
+- Vue.js Loader
+- Preview Build
 
 ## Darvin Boilerplate - Start
 ![](https://img.shields.io/github/issues-closed-raw/tobiasfrei/darvin-boilerplate.svg?style=popout-square)
@@ -34,7 +32,7 @@ Windows
 1. install node version ```nvm install 11.7.0```
 
 2. load node version from .nvmrc ```nvm use```<br>
-Note: won't work? try ```nvm use 11.7.0```
+Note: won't work on windows? try ```nvm use 11.7.0```
 
 3. install dependencies ```npm install```
 
@@ -43,18 +41,26 @@ Load installed node version each time you startup the project:<br>
 ```nvm use```
 
 ### Develop
-Run watcher and hot load browser on file changes.<br>
+Run webpack dev server and watch file change.<br>
 ```npm run dev```
 
-### Production
-Run this mode for minifyed outstream. Required for SEO purpose and many CMS asset aggregations.<br>
+### Build
+Run this mode for minifyed outstream. Required for SEO purpose and CMS asset aggregations.<br>
 ```npm run prod```
+
+### Preview
+Edit preview files and watch for changes (run parallel in other terminal)<br>
+```npm run prev-dev```
+
+### Build Preview
+Build Preview<br>
+```npm run prev-prod```
 
 ## Sprites
 SVG Spritemap will be generated referenced to filenames in:<br>
 ```src/assets/images/icons```<br>
 <br>
-There are two ways to integrate them in templates.<br>
+Choose between HTML or CSS:<br>
 
 ### Inline HTML
 SVG Sprites are prefixed with ```sprite-``` followed by filename.<br>
