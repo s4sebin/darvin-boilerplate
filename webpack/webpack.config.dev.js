@@ -6,7 +6,6 @@ const webpackConfig = require('../webpack.config');
 
 
 /*** Dynamic Imports START ***/
-const { dev: browserSync } = require('./settings/env-browsersync');
 const { dev: devServer } = require('./settings/env-devserver');
 const { dev: clean } = require('./settings/assets-cleaner');
 const { dev: copy } = require('./settings/assets-copy');

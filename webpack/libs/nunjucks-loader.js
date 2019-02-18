@@ -4,6 +4,8 @@
 * edit by Darvin
 */
 
+/*jslint no-useless-escape: false */
+
 const utils = require('loader-utils');
 const fs = require('fs');
 const path = require('path');

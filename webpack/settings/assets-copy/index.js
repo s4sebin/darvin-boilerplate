@@ -54,7 +54,7 @@ const dev = {
       {
         from: basePath + '/src/assets/images/favicons/favicon-dev.ico',
         flatten: true,
-        transformPath (targetPath) {
+        transformPath () {
           return 'favicon.ico';
         }
       },
