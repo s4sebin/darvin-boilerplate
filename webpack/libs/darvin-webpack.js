@@ -46,7 +46,7 @@ previewIndexObj.types.forEach((type) => {
         id: crypto.createHash('md5').update(file).digest("hex"),
         name: file,
         type: type,
-        chunkName: `js/preview`,
+        chunkName: `js/main`,
         template: templateObj.template,
         templateRel: templateObj.template.replace('src/templates/', ''),
         target: `${tmplPath}/${file}.html`,

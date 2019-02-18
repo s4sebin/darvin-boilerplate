@@ -5,7 +5,7 @@
   "scripts": {
     "start": "npm install; npm run dev",
     "preview": "webpack-dev-server --open",
-    "dev": "cross-env NODE_ENV=dev webpack-dev-server --hot --inline --progress --mode development --config webpack/webpack.config.dev.js --history-api-fallback",
+    "dev": "cross-env NODE_ENV=dev -- webpack-dev-server --hot --inline --progress --mode development --config webpack/webpack.config.dev.js",
     "prod": "cross-env NODE_ENV=prod webpack -p --progress --mode production --config webpack/webpack.config.prod.js",
     "prev": "webpack -p --progress --mode production --config  webpack/webpack.preview.js ",
     "lint": "lint-staged",

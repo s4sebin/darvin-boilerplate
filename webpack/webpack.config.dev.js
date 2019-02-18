@@ -4,8 +4,10 @@ const basePath = process.cwd();
 const merge = require('webpack-merge');
 const webpackConfig = require('../webpack.config');
 
+
 /*** Dynamic Imports START ***/
 const { dev: browserSync } = require('./settings/env-browsersync');
+const { dev: devServer } = require('./settings/env-devserver');
 const { dev: clean } = require('./settings/assets-cleaner');
 const { dev: copy } = require('./settings/assets-copy');
 const { dev: config } = require('./settings/javascript-i18n');
@@ -32,17 +34,7 @@ const settings = {
     filename: '[name].js',
     publicPath: '/'
   },
-  devtool: 'cheap-module-eval-source-map',
-  devServer: {
-    contentBase: path.resolve(basePath, 'dist/build'),
-    compress: false,
-    port: 9000,
-    open: true,
-    watchContentBase: true,
-    watchOptions: {
-      ignored: ['**/*.woff', '**/*.woff2', '**/*.jpg', '**/*.png', '**/*.svg', 'node_modules'],
-    }
-  }
+  devtool: 'cheap-module-eval-source-map'
 };
 
-module.exports = merge(webpackConfig, settings, clean, copy, js, css, config, fonts, images, modernizr, nunjucks, vue, sprites, markdown);
+module.exports = merge(webpackConfig, settings, clean, copy, js, css, config, fonts, images, modernizr, nunjucks, vue, sprites, markdown, devServer);

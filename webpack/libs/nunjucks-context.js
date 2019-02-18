@@ -7,6 +7,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 let { previewIndexObj } = require('./darvin-webpack'),
     htmlTemplates = [];
 
+
 const dynamicSort = (property) => {
   var sortOrder = 1;
   if(property[0] === "-") {
@@ -21,6 +22,7 @@ const dynamicSort = (property) => {
 
 console.log('build template context..');
 
+
 // iterate all elements and render previews
 Object.keys(previewIndexObj.payload).forEach(function (key) {
   let items = previewIndexObj.payload[key];
@@ -31,15 +33,20 @@ Object.keys(previewIndexObj.payload).forEach(function (key) {
       elementObj.previews.forEach(function (preview) {
         let targetPath = `${elementObj.path}/${preview}`;
 
-        htmlTemplates.push(new HtmlWebpackPlugin({
+        console.log( targetPath + '.html');
+
+        let obj = new HtmlWebpackPlugin({
           filename: targetPath + '.html',
           template: 'src/templates/' + targetPath + '.njk',
-          hash: false,
+          hash: true,
           inject: 'body',
-          cache: false,
+          cache: true,
           chunks: [elementObj.chunkName],
           templateParameters: elementObj
-        }))
+        });
+
+
+        htmlTemplates.push(obj)
       })
 
   });
@@ -49,14 +56,14 @@ Object.keys(previewIndexObj.payload).forEach(function (key) {
 htmlTemplates.push(new HtmlWebpackPlugin({
   filename: 'index.html',
   template: 'src/templates/index.njk',
-  hash: false,
+  hash: true,
   inject: 'body',
-  cache: false,
-  chunks: ['js/preview'],
+  cache: true,
+  chunks: ['js/main'],
   templateParameters: {
     name: 'index',
     type: 'preview',
-    chunkName: 'js/preview',
+    chunkName: 'js/main',
     template: 'src/templates/index.njk',
     templateRel: 'index.njk',
     target: 'index.html',

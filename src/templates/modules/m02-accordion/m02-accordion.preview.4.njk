@@ -2,15 +2,15 @@
 
 {% import "modules/m02-accordion/m02-accordion.njk" as accordion %}
 
-{% set variantName = "Variant 2" %}
-{% set variantDescr = "test module 2" %}
+{% set variantName = "Variant 4" %}
+{% set variantDescr = "test module 4" %}
 
 {% macro main() %}
     {% call accordion.main(basePath = basePath, classes = ['m-accordion'], labelContent = accordion.accordionLabel(
           basePath = basePath,
-          label = "Accordion Variant 2"
+          label = "Accordion Variant 14"
     )) %}
-      <p>other content 2.</p>
+      <p>other content 4.</p>
     {% endcall %}
 {% endmacro %}
 

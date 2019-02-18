@@ -8,6 +8,10 @@ const utils = require('loader-utils');
 const fs = require('fs');
 const path = require('path');
 const nunjucks = require('nunjucks');
+const crypto = require('crypto');
+
+let devServer = require('./devServerStorage');
+let cacheRegister = {};
 
 const NunjucksLoader = nunjucks.Loader.extend({
   init(searchPaths, sourceFoundCallback) {
@@ -47,7 +51,7 @@ const NunjucksLoader = nunjucks.Loader.extend({
     return {
       src: fs.readFileSync(fullpath, 'utf-8'),
       path: fullpath,
-      noCache: false,
+      noCache: false
     };
   },
 });
@@ -55,14 +59,17 @@ const NunjucksLoader = nunjucks.Loader.extend({
 module.exports = function(content) {
   this.cacheable();
 
-  // const loaderFilename = this.resourcePath.replace(/^.*[\\\/]/, '');
-  const loaderPath = this.resourcePath.split('src/templates/')[1];
-  const loaderPathRel = loaderPath.substring(0, loaderPath.lastIndexOf("/"));
+  const loaderPath = this.resourcePath.split('src/templates/')[1],
+        loaderPathRel = loaderPath.substring(0, loaderPath.lastIndexOf("/")),
+        callback = this.async(),
+        opt = utils.parseQuery(this.query),
+        nunjucksSearchPaths = opt.searchPaths;
 
-  const callback = this.async();
-  const opt = utils.parseQuery(this.query);
-  let nunjucksContext = opt.context;
-  const nunjucksSearchPaths = opt.searchPaths;
+  let loader,
+      nunjEnv,
+      template,
+      html,
+      nunjucksContext = opt.context;
 
   nunjucksContext.darvin = {};
 
@@ -75,15 +82,24 @@ module.exports = function(content) {
 
   nunjucksContext.darvin.filepath = loaderPath.replace(/^.*[\\\/]/, '').replace('.njk', ''); // remove file extension
 
-  const loader = new NunjucksLoader(nunjucksSearchPaths, ((filePath) => {
+  loader = new NunjucksLoader(nunjucksSearchPaths, ((filePath) => {
     this.addDependency(filePath);
   }));
 
-  const nunjEnv = new nunjucks.Environment(loader);
+  nunjEnv = new nunjucks.Environment(loader);
   nunjucks.configure(null, { watch: false });
 
-  const template = nunjucks.compile(content, nunjEnv);
-  const html = template.render(nunjucksContext);
+  template = nunjucks.compile(content, nunjEnv);
+  html = template.render(nunjucksContext);
+
+  // force reload
+  if(cacheRegister[loaderPath]) {
+    if(cacheRegister[loaderPath] !== crypto.createHash('md5').update(html).digest("hex")) {
+      devServer.server.sockWrite(devServer.server.sockets, 'content-changed');
+    }
+  }
+
+  cacheRegister[loaderPath] = crypto.createHash('md5').update(html).digest("hex");
 
   callback(null, html);
 };
