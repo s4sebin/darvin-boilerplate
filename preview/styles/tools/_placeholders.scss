@@ -10,7 +10,7 @@
 
 %font-title {
   font-weight: 500;
-  font-family: $font-1;
+  font-family: $font1;
   font-style: italic;
 }
 
@@ -18,8 +18,13 @@
   @extend %antialiased;
   font-weight: 400;
   font-size: rem(16px);
-  line-height: 1.79;
-  color: var(--main-dark);
+  line-height: 1.2;
+
+  font-weight: 400;
+
+  font-family: $font1;
+  letter-spacing: 0.025rem;
+  color: rgba(var(--main-bright), 0.5);
 
   @media #{$medium-up} {
     font-size: rem(19px);
@@ -67,7 +72,7 @@
 
 %header-base {
   @extend %antialiased;
-  font-family: $font-1;
+  font-family: $font1;
 }
 
 %ul-unstyled {

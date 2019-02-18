@@ -149,13 +149,15 @@ $preview-index-spacer-small: 0.25rem;
   color: var(--card-footer-text);
   background-color: var(--card-footer-bg);
   opacity: 0.6;
+  height: 18px;
+  line-height: 1;
 
   .prev-m-index__itemrow {
     align-items: center;
   }
 
   .prev-m-index__minibtn {
-    margin-right: 1rem;
+    margin-right: 5px;
   }
 }
 
@@ -169,7 +171,6 @@ $preview-index-spacer-small: 0.25rem;
   align-items: center;
   width: 18px;
   height: 18px;
-  margin-right: 0.25rem;
   font-weight: 400;
   font-size: 11px;
   color: var(--card-footer-text);
@@ -236,12 +237,17 @@ $preview-index-spacer-small: 0.25rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 20px;
-  height: 20px;
+  width: 17px;
+  height: 17px;
   cursor: pointer;
 
   i {
-    color: var(--main-border);
+    color: var(--main-shadow);
+    opacity: 0.5;
+
+    &:before {
+      font-size: 12px;
+    }
   }
 
   &:hover {

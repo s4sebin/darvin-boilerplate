@@ -157,10 +157,6 @@
             this.removeDependencyPaths();
             this.setListLayoutReady({ registeredLayouts: [] });
           }
-
-
-          // set callback array and wait for registeredLayouts events
-          //this.setListLayoutReady({ registeredLayouts: [] });
         },
         registeredLayouts() {
           if(this.registeredLayouts.length === Object.keys(this.filteredCategories).length) {

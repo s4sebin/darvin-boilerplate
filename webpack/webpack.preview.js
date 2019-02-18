@@ -7,7 +7,7 @@ const webpackConfig = require('../webpack.config');
 /*** Dynamic Imports START ***/
 const { prev: clean } = require('./settings/assets-cleaner');
 const { prev: css } = require('./settings/style-sass');
-const { dev: fonts } = require('./settings/assets-fonts');
+const { prev: fonts } = require('./settings/assets-fonts');
 const { dev: js } = require('./settings/javascript');
 const { dev: vue } = require('./settings/javascript-vue');
 const { prev: sprites } = require('./settings/assets-sprites');

@@ -1,12 +1,12 @@
-const path = require('path');
+const basePath = process.cwd();
 const SVGSpritemapPlugin = require('svg-spritemap-webpack-plugin');
 
 const prod = {
   plugins: [
     new SVGSpritemapPlugin({
-      src: path.resolve(__dirname, 'src/assets/images/icons/**/*.svg'),
-      styles: path.resolve(__dirname, 'src/styles/tools/_svg-sprite.scss'),
-      filename: 'build/assets/images/sprites/svg-sprite.svg',
+      src: basePath + '/src/assets/images/icons/**/*.svg',
+      styles: basePath + '/src/styles/tools/_svg-sprite.scss',
+      filename: 'assets/images/sprites/svg-sprite.svg',
       gutter: 3,
     }),
   ],
@@ -15,9 +15,9 @@ const prod = {
 const dev = {
   plugins: [
     new SVGSpritemapPlugin({
-      src: path.resolve(__dirname, 'src/assets/images/icons/**/*.svg'),
-      styles: path.resolve(__dirname, 'src/styles/tools/_svg-sprite.scss'),
-      filename: 'build/assets/images/sprites/svg-sprite.svg',
+      src: basePath + '/src/assets/images/icons/**/*.svg',
+      styles: basePath + '/src/styles/tools/_svg-sprite.scss',
+      filename: 'assets/images/sprites/svg-sprite.svg',
       gutter: 3,
     }),
   ],
@@ -26,9 +26,9 @@ const dev = {
 const prev = {
   plugins: [
     new SVGSpritemapPlugin({
-      src: path.resolve(__dirname, 'preview/assets/images/icons/**/*.svg'),
-      styles: path.resolve(__dirname, 'preview/styles/tools/_svg-sprite.scss'),
-      filename: 'preview/assets/images/sprites/svg-sprite-darvin.svg',
+      src: basePath + '/preview/assets/images/icons/**/*.svg',
+      styles: basePath + '/preview/styles/tools/_svg-sprite.scss',
+      filename: '../preview/assets/images/sprites/svg-sprite-darvin.svg',
       gutter: 3,
     }),
   ],

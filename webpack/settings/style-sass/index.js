@@ -126,7 +126,7 @@ const prev = {
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: 'preview.css',
+      filename: 'styles/preview.css',
     }),
   ]
 }
