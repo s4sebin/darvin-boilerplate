@@ -15,8 +15,7 @@ create static HTML pages with preview. Suitable for the delivery of frontend pro
 - Preview Build
 
 ## Darvin Boilerplate - Start
-![](https://img.shields.io/github/issues-closed-raw/tobiasfrei/darvin-boilerplate.svg?style=popout-square)
-![](https://img.shields.io/github/issues-raw/tobiasfrei/darvin-boilerplate.svg?style=popout-square)
+![](https://img.shields.io/github/last-commit/tobiasfrei/darvin-boilerplate.svg?style=flat)
 
 Recommended: Node 11.7.0
 
