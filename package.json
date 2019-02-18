@@ -1,6 +1,6 @@
 {
   "name": "darvin-boilerplate",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Darvin is a webpack boilerplate for developing static HTML pages with Nunjucks templates, ES201X transpiler and Sass precompiling with SVG/PNG sprites.",
   "scripts": {
     "start": "npm install; npm run dev",
