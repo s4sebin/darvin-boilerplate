@@ -25,10 +25,10 @@ const settings = {
   entry: webpackEntryObj,
   output: {
     devtoolLineToLine: true,
-    sourceMapFilename: '[name].js.map',
-    path: path.resolve(basePath, 'dist'),
+    sourceMapFilename: 'assets/[name].js.map',
+    path: path.resolve(basePath, 'dist/build'),
     pathinfo: false,
-    filename: '[name].js',
+    filename: 'assets/[name].js',
     chunkFilename: 'async/[name].chunk.js',
     publicPath: '/'
   },

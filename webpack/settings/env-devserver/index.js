@@ -6,7 +6,7 @@ let devServer = require('../../libs/devserver-storage');
 const dev = {
   devServer: {
     before(app, server) {
-      // set to storage
+      // set storage
       devServer.server = server;
       devServer.app = app;
     },
@@ -19,7 +19,7 @@ const dev = {
     compress: true,
     port: 7000,
     open: true,
-    writeToDisk: true,
+    //writeToDisk: true,
     publicPath: '/'
   }
 }

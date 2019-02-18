@@ -30,7 +30,7 @@ const settings = {
     // sourceMapFilename: '[name].js.map',
     path: path.resolve(basePath, 'dist/build'),
     pathinfo: false,
-    filename: '[name].js',
+    filename: 'assets/[name].js',
     publicPath: '/'
   },
   devtool: 'cheap-module-eval-source-map'

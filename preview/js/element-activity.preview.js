@@ -178,7 +178,7 @@ instance.init = (options) => {
 
   if (!moduleCards) return;
 
-  loadJson('log/activity-visualizer.json');
+  loadJson('assets/log/activity-visualizer.json');
 
   return instance;
 };

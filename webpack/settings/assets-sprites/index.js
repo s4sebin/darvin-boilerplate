@@ -6,7 +6,7 @@ const prod = {
     new SVGSpritemapPlugin({
       src: path.resolve(__dirname, 'src/assets/images/icons/**/*.svg'),
       styles: path.resolve(__dirname, 'src/styles/tools/_svg-sprite.scss'),
-      filename: 'images/sprites/svg-sprite.svg',
+      filename: 'build/assets/images/sprites/svg-sprite.svg',
       gutter: 3,
     }),
   ],
@@ -17,7 +17,18 @@ const dev = {
     new SVGSpritemapPlugin({
       src: path.resolve(__dirname, 'src/assets/images/icons/**/*.svg'),
       styles: path.resolve(__dirname, 'src/styles/tools/_svg-sprite.scss'),
-      filename: 'images/sprites/svg-sprite.svg',
+      filename: 'build/assets/images/sprites/svg-sprite.svg',
+      gutter: 3,
+    }),
+  ],
+}
+
+const prev = {
+  plugins: [
+    new SVGSpritemapPlugin({
+      src: path.resolve(__dirname, 'preview/assets/images/icons/**/*.svg'),
+      styles: path.resolve(__dirname, 'preview/styles/tools/_svg-sprite.scss'),
+      filename: 'preview/assets/images/sprites/svg-sprite-darvin.svg',
       gutter: 3,
     }),
   ],
@@ -25,5 +36,6 @@ const dev = {
 
 module.exports = {
   prod: prod,
-  dev: dev
+  dev: dev,
+  prev: prev
 };

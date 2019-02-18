@@ -1,8 +1,6 @@
 
 # Created by https://www.gitignore.io/api/node,bower,osx,linux,windows,dropbox,sass,less,grunt,sublimetext,code
 
-dist/build
-resources/*.css
 ### Node ###
 # Logs
 logs
@@ -19,9 +17,6 @@ lib-cov
 
 # Coverage directory used by tools like istanbul
 coverage
-
-# Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
-.grunt
 
 # node-waf configuration
 .lock-wscript
@@ -41,14 +36,6 @@ node_modules
 
 # Optional REPL history
 .node_repl_history
-
-
-### Bower ###
-bower_components
-.bower-cache
-.bower-registry
-.bower-tmp
-
 
 ### OSX ###
 .DS_Store
@@ -121,21 +108,6 @@ $RECYCLE.BIN/
 *.css.map
 
 
-### Less ###
-# *.css
-
-
-### grunt ###
-# Grunt usually compiles files inside this directory
-# dist/
-
-# Grunt usually preprocesses files such as coffeescript, compass... inside the .tmp directory
-.tmp/
-
-# Webpack
-# dist/build
-
-
 ### SublimeText ###
 # cache files for sublime text
 *.tmlanguage.cache
@@ -159,6 +131,7 @@ sftp-config.json
 .vscode/
 
 ### Darvin ###
+dist/build
 log/
 dependencies.json
 activity-graph.json

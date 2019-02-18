@@ -1,25 +1,25 @@
 let darkmode = false;
 
-if(localStorage.getItem("darvin-darkmode")) {
-  if(localStorage.getItem("darvin-darkmode")=='true') {
+if (localStorage.getItem("darvin-darkmode")) {
+  if (localStorage.getItem("darvin-darkmode") == 'true') {
     darkmode = true;
   }
 }
 
 export default {
-    filters: [],
+  filters: [],
 
-    selectedFilter: [],
+  selectedFilter: [],
 
-    search: '',
+  search: '',
 
-    activity: {},
+  activity: {},
 
-    isMobileVisible: false,
+  isMobileVisible: false,
 
-    darkmode: darkmode,
+  darkmode: darkmode,
 
-    dependencies: [],
+  dependencies: [],
 
-    registeredLayouts: [],
+  registeredLayouts: [],
 }

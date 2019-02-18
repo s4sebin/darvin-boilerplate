@@ -7,7 +7,7 @@ const prod = {
           loader: 'file-loader',
           options: {
             name: '[name].[ext]',
-            outputPath: 'js/',
+            outputPath: 'assets/js/',
           },
         }],
       },
@@ -24,7 +24,7 @@ const dev = {
           loader: 'file-loader',
           options: {
             name: '[name].[ext]',
-            outputPath: 'js/',
+            outputPath: 'assets/js/',
           },
         }],
       },

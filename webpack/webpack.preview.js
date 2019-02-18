@@ -10,6 +10,7 @@ const { prev: css } = require('./settings/style-sass');
 const { dev: fonts } = require('./settings/assets-fonts');
 const { dev: js } = require('./settings/javascript');
 const { dev: vue } = require('./settings/javascript-vue');
+const { prev: sprites } = require('./settings/assets-sprites');
 /*** Dynamic Imports END ***/
 
 const settings = {
@@ -29,4 +30,4 @@ const settings = {
   },
 };
 
-module.exports = merge(webpackConfig, settings, clean, js, css, fonts, vue);
+module.exports = merge(webpackConfig, settings, clean, js, css, fonts, vue, sprites);

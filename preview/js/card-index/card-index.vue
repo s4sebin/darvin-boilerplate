@@ -140,7 +140,7 @@
           // set search
           this.setSearch({ search: ''});
 
-          axios.get('./log/activity-visualizer.json')
+          axios.get('./assets/log/activity-visualizer.json')
             .then((response) => {
                 this.setActivity({ activity: response.data});
                 this.dataReady = true;

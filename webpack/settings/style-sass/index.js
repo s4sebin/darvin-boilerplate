@@ -39,7 +39,7 @@ const prod = {
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: 'css/style.[contenthash].css',
+      filename: 'assets/css/style.css',
       hot: true
     }),
   ]
@@ -83,7 +83,7 @@ const dev = {
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: 'css/style.css',
+      filename: 'assets/css/style.css',
     }),
   ]
 }

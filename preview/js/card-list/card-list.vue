@@ -33,7 +33,6 @@
   import { mapActions, mapState } from 'vuex';
 
   import facetMixin from '../libs/vue/facetMixin';
-  import debounce from 'lodash.debounce';
 
   export default {
     components: { isotope },

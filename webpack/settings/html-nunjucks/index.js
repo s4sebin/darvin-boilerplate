@@ -31,7 +31,7 @@ const prod = {
     ...htmlTemplates,
     new FaviconsWebpackPlugin({
       logo: path.resolve('src/assets/images/favicons/favicon-prod.png'),
-      prefix: 'images/icons/',
+      prefix: 'assets/images/icons/',
       emitStats: false,
       statsFilename: 'iconstats-[hash].json',
       persistentCache: true,

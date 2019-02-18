@@ -6,7 +6,7 @@ const prod = {
     new CopyWebpackPlugin([
       {
         from: basePath + '/log/*.{md,json}',
-        to: 'log/',
+        to: 'assets/log/',
         flatten: true
       },
       {
@@ -48,7 +48,7 @@ const dev = {
     [
       {
         from: basePath + '/log/*.{md,json}',
-        to: 'log/',
+        to: 'assets/log/',
         flatten: true
       },
       {
