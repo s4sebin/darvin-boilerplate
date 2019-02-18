@@ -1,5 +1,4 @@
-
-/*ignore jslint start*/
+/*eslint-disable */
 /*! LeaderLine v1.0.5 (c) anseki https://anseki.github.io/leader-line/ */
 export function LeaderLine() {
   "use strict";
@@ -2984,4 +2983,4 @@ export function LeaderLine() {
           })
       }), !1), Ye
 }
-/*ignore jslint end*/
+/*eslint-enable */

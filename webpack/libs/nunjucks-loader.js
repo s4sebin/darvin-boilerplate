@@ -4,8 +4,6 @@
 * edit by Darvin
 */
 
-/*jslint no-useless-escape: false */
-
 const utils = require('loader-utils');
 const fs = require('fs');
 const path = require('path');
@@ -82,6 +80,7 @@ module.exports = function(content) {
     }
   });
 
+  // eslint-disable-next-line no-useless-escape
   nunjucksContext.darvin.filepath = loaderPath.replace(/^.*[\\\/]/, '').replace('.njk', ''); // remove file extension
 
   loader = new NunjucksLoader(nunjucksSearchPaths, ((filePath) => {
