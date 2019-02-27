@@ -15,7 +15,7 @@ create static HTML pages with preview. Suitable for the delivery of frontend pro
 - Preview Build
 
 # Setup
-Please consider the [Wiki Space](https://github.com/tobiasfrei) for instructions.
+Please consider the [Wiki Space](https://github.com/tobiasfrei/darvin-boilerplate/wiki) for instructions.
 
 [1. Prerequisites](https://github.com/tobiasfrei/darvin-boilerplate/wiki/1.-Prerequisites)<br>
 [2. Start](https://github.com/tobiasfrei/darvin-boilerplate/wiki/2.-Start)<br>
