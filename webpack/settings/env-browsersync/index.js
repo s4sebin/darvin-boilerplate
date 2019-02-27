@@ -8,7 +8,7 @@ const dev = {
         baseDir: ['dist'],
         directory: false,
       },
-      startPath: '/build/index.html',
+      startPath: 'index.html',
       port: 1712,
       files: ['css/*.css', 'js/*.js', '**/*.njk'],
       open: true,

@@ -88,11 +88,27 @@ getTemplateFiles = (type, file) => {
     previews: tmplPreviews
   }
 },
+getSVGIcons = () => {
+  let icons = [];
+
+  // get previews
+  icons = glob.sync('*.svg', {
+    cwd: path.join(basePath, `src/assets/images/icons`),
+    realpath: false
+  }).map(page => {
+    return page.replace('.svg', '');
+  });
+
+  return {
+    icons: icons
+  }
+},
 getDirs = p => fs.readdirSync(p).filter(f => fs.statSync(path.join(p, f)).isDirectory());
 
 module.exports = {
   filterCommitsInDateRange: filterCommitsInDateRange,
   prepareDependencies: prepareDependencies,
   getTemplateFiles: getTemplateFiles,
-  getDirs: getDirs
+  getDirs: getDirs,
+  getSVGIcons: getSVGIcons
 };

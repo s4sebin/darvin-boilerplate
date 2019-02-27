@@ -17,7 +17,6 @@ $output-bourbon-deprecation-warnings: false;
 @import "tools/mixins";
 @import "tools/transitions";
 @import "tools/helpers";
-@import "tools/svg-sprite";
 // Base
 @import "base/base";
 // Layout
@@ -32,3 +31,12 @@ $output-bourbon-deprecation-warnings: false;
 // Modules
 @import "../templates/modules/m03-demo/m03-demo";
 @import "../templates/modules/m02-accordion/m02-accordion";
+
+
+.prev-m-title {
+  font-size: 19px;
+}
+
+.prev-m-subtitle {
+  font-size: 13px;
+}

@@ -7,7 +7,7 @@ const fs = require('fs');
 const simpleGit = require('simple-git')(basePath);
 const crypto = require('crypto');
 
-const { filterCommitsInDateRange, prepareDependencies, getTemplateFiles, getDirs } = require('./darvin-helpers');
+const { filterCommitsInDateRange, prepareDependencies, getTemplateFiles, getDirs, getSVGIcons } = require('./darvin-helpers');
 
 let webpackEntryObj = {},
     previewIndexObj = {
@@ -135,7 +135,12 @@ if (!fs.existsSync('./log')){
 
 fs.writeFileSync(`./log/entry.report.json`, JSON.stringify(webpackEntryObj), 'utf8', () => { });
 
+// get icons
+let allIconsInDir = getSVGIcons();
+
+
 module.exports = {
   webpackEntryObj: webpackEntryObj,
-  previewIndexObj: previewIndexObj
+  previewIndexObj: previewIndexObj,
+  allIconsInDir: allIconsInDir
 };

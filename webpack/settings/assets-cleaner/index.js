@@ -3,18 +3,20 @@ const basePath = process.cwd();
 
 const prod = {
   plugins: [
-    new CleanWebpackPlugin(['dist/build'], {
+    new CleanWebpackPlugin(['dist'], {
       root: basePath,
-      exclude: ['dist/preview/'],
+      exclude: ['preview'],
+      verbose: true
     }),
   ],
 };
 
 const dev = {
   plugins: [
-    new CleanWebpackPlugin(['dist/build'], {
+    new CleanWebpackPlugin(['dist'], {
       root: basePath,
-      exclude: ['dist/preview/'],
+      exclude: ['preview'],
+      verbose: true
     }),
   ],
 }

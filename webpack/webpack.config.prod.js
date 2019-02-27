@@ -27,7 +27,7 @@ const settings = {
   output: {
     devtoolLineToLine: true,
     sourceMapFilename: 'assets/[name].js.map',
-    path: path.resolve(basePath, 'dist/build'),
+    path: path.resolve(basePath, 'dist'),
     pathinfo: false,
     filename: 'assets/[name].js',
     chunkFilename: 'async/[name].chunk.js',
