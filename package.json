@@ -4,9 +4,8 @@
   "description": "Darvin is a webpack boilerplate for developing static HTML pages with Nunjucks templates, ES201X transpiler and Sass precompiling with SVG/PNG sprites.",
   "scripts": {
     "start": "npm install; npm run dev",
-    "preview": "webpack-dev-server --open",
-    "dev": "cross-env NODE_ENV=dev webpack-dev-server --hot --inline --progress --mode development --config webpack/webpack.config.dev.js",
-    "prod": "cross-env NODE_ENV=prod webpack -p --progress --mode production --config webpack/webpack.config.prod.js",
+    "dev": "npm run prev-prod; cross-env NODE_ENV=dev webpack-dev-server --hot --inline --progress --mode development --config webpack/webpack.config.dev.js",
+    "prod": "npm run prev-prod; cross-env NODE_ENV=prod webpack -p --progress --mode production --config webpack/webpack.config.prod.js",
     "prev-dev": "cross-env NODE_ENV=dev webpack -p --progress --mode development --config  webpack/webpack.preview.js --watch",
     "prev-prod": "cross-env NODE_ENV=prod webpack -p --progress --mode production --config  webpack/webpack.preview.js",
     "lint": "lint-staged",

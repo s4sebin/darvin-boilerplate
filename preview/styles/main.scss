@@ -34,6 +34,7 @@ $output-bourbon-deprecation-warnings: false;
 @import "modules/index";
 @import "modules/overlay";
 @import "modules/filterbar";
+@import "modules/flexgrid";
 
 // Components
 @import "components/led";

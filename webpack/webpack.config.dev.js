@@ -28,7 +28,7 @@ const settings = {
   output: {
     devtoolLineToLine: false,
     // sourceMapFilename: '[name].js.map',
-    path: path.resolve(basePath, 'dist/build'),
+    path: path.resolve(basePath, 'dist'),
     pathinfo: false,
     filename: 'assets/[name].js',
     publicPath: '/'

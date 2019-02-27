@@ -4,7 +4,7 @@ const path = require('path');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-let { previewIndexObj } = require('./darvin-webpack'),
+let { previewIndexObj, allIconsInDir } = require('./darvin-webpack'),
     htmlTemplates = [];
 
 
@@ -75,6 +75,7 @@ htmlTemplates.push(new HtmlWebpackPlugin({
 
 module.exports = {
   imageSrc: '/assets/images/renditions/',
-  htmlTemplates: htmlTemplates, // nunjuck loader
-  index: previewIndexObj //  index generator
+  htmlTemplates: htmlTemplates,
+  index: previewIndexObj,
+  sprite: allIconsInDir
 };

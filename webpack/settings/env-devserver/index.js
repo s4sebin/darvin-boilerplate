@@ -14,13 +14,14 @@ const dev = {
       aggregateTimeout: 300,
       poll: 1000,
     },*/
-    contentBase: path.resolve(basePath, 'dist'),
+    contentBase: [path.resolve(basePath, 'dist')],
     watchContentBase: true,
     compress: true,
-    port: 7000,
-    open: true,
-    //writeToDisk: true,
-    publicPath: '/'
+    port: 7001,
+    open: 'Google Chrome',
+    writeToDisk: false,
+    publicPath: '/',
+    index: 'index.html'
   }
 }
 
