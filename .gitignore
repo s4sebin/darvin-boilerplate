@@ -131,6 +131,7 @@ sftp-config.json
 .vscode/
 
 ### Darvin ###
+dist/
 log/
 dependencies.json
 activity-graph.json
