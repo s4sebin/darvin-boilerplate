@@ -2,6 +2,7 @@ const path = require('path');
 const basePath = process.cwd();
 const merge = require('webpack-merge');
 
+const WebpackShellPlugin = require('webpack-shell-plugin-next');
 const webpackConfig = require('../webpack.config');
 
 /*** Dynamic Imports START ***/
@@ -33,6 +34,20 @@ const settings = {
     publicPath: '/'
   },
   devtool: 'source-map',
+  plugins: [
+    new WebpackShellPlugin({
+      onBuildStart:{
+        scripts: ['echo \> START COMPILING'],
+        blocking: true,
+        parallel: false
+      },
+      onBuildEnd:{
+        scripts: ['echo \> COMPILING END'],
+        blocking: true,
+        parallel: false
+      }
+    })
+  ]
 };
 
 module.exports = merge(webpackConfig, settings, js, css, config, clean, fonts, images, modernizr, nunjucks, vue, sprites, analyzer, copy);

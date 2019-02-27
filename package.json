@@ -11,6 +11,7 @@
     "prev-prod": "cross-env NODE_ENV=prod webpack -p --progress --mode production --config  webpack/webpack.preview.js",
     "lint": "lint-staged",
     "lint-all": "eslint \"src/**/*.js\" --fix",
+    "beautify": "beautify \"dist/build/**/*.html\"",
     "pre-commit": "lint-staged; csscomb; git add --all"
   },
   "email": "mail@tobiasfrei.ch",
@@ -79,7 +80,8 @@
     "webpack-cli": "^3.2.3",
     "webpack-dev-server": "^3.1.14",
     "webpack-merge": "^4.1.4",
-    "webpack-modernizr-loader": "^4.0.1"
+    "webpack-modernizr-loader": "^4.0.1",
+    "webpack-shell-plugin-next": "^0.6.4"
   },
   "dependencies": {
     "@unic/composite-observer": "0.0.10",
