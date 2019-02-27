@@ -20,8 +20,7 @@ const dynamicSort = (property) => {
   }
 }
 
-console.log('build template context..');
-
+console.log('> BUILD HTML CONTEXT');
 
 // iterate all elements and render previews
 Object.keys(previewIndexObj.payload).forEach(function (key) {
@@ -33,8 +32,6 @@ Object.keys(previewIndexObj.payload).forEach(function (key) {
       elementObj.previews.forEach(function (preview) {
         let targetPath = `${elementObj.path}/${preview}`;
 
-        console.log( targetPath + '.html');
-
         let obj = new HtmlWebpackPlugin({
           filename: targetPath + '.html',
           template: 'src/templates/' + targetPath + '.njk',
@@ -44,7 +41,6 @@ Object.keys(previewIndexObj.payload).forEach(function (key) {
           chunks: [elementObj.chunkName],
           templateParameters: elementObj
         });
-
 
         htmlTemplates.push(obj)
       })
@@ -75,7 +71,7 @@ htmlTemplates.push(new HtmlWebpackPlugin({
 
 module.exports = {
   imageSrc: '/assets/images/renditions/',
-  htmlTemplates: htmlTemplates,
-  index: previewIndexObj,
+  htmlTemplates: htmlTemplates, // nunjuck loader
+  index: previewIndexObj, //  index generator
   sprite: allIconsInDir
 };

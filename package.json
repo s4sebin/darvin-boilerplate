@@ -3,7 +3,7 @@
   "version": "0.0.4",
   "description": "Darvin is a webpack boilerplate for developing static HTML pages with Nunjucks templates, ES201X transpiler and Sass precompiling with SVG/PNG sprites.",
   "scripts": {
-    "start": "npm install; npm run dev",
+    "start": "npm install; npm run prev-prod; npm run dev",
     "dev": "npm run prev-prod; cross-env NODE_ENV=dev webpack-dev-server --hot --inline --progress --mode development --config webpack/webpack.config.dev.js",
     "prod": "npm run prev-prod; cross-env NODE_ENV=prod webpack -p --progress --mode production --config webpack/webpack.config.prod.js",
     "prev-dev": "cross-env NODE_ENV=dev webpack -p --progress --mode development --config  webpack/webpack.preview.js --watch",
@@ -62,7 +62,7 @@
     "leader-line": "^1.0.5",
     "lint-staged": "7.3.0",
     "mini-css-extract-plugin": "^0.4.1",
-    "node-sass": "^4.9.2",
+    "node-sass": "^4.11.0",
     "nunjucks": "^3.1.7",
     "nunjucks-loader": "^3.0.0",
     "nunjucks-parser": "^1.0.1",
@@ -78,8 +78,8 @@
     "webpack-cli": "^3.2.3",
     "webpack-dev-server": "^3.1.14",
     "webpack-merge": "^4.1.4",
-    "webpack-shell-plugin-next": "^0.6.4",
-    "webpack-modernizr-loader": "^4.0.1"
+    "webpack-modernizr-loader": "^4.0.1",
+    "webpack-shell-plugin-next": "^0.6.4"
   },
   "dependencies": {
     "@unic/composite-observer": "0.0.10",
@@ -90,6 +90,8 @@
     "modernizr": "^3.6.0",
     "normalize.css": "^8.0.0",
     "prismjs": "^1.15.0",
+    "sass-extract": "^2.1.0",
+    "sass-extract-loader": "^1.1.0",
     "simple-git": "^1.107.0",
     "vue": "^2.5.17",
     "vue-masonry": "^0.11.7",

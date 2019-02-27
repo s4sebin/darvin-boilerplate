@@ -93,7 +93,7 @@ getSVGIcons = () => {
 
   // get previews
   icons = glob.sync('*.svg', {
-    cwd: path.join(basePath, `src/assets/images/icons`),
+    cwd: path.join(basePath, `src/assets/images/icons/`),
     realpath: false
   }).map(page => {
     return page.replace('.svg', '');
