@@ -3,22 +3,27 @@
    ====== */
 
 $output-bourbon-deprecation-warnings: false;
+
 // Assets
 @import "../../node_modules/bourbon/core/bourbon";
 @import "../../node_modules/normalize.css/normalize";
 @import "tools/functions";
 @import "settings/settings";
+
 // Settings
 @import "settings/breakpoints";
 @import "settings/fonts";
 @import "settings/grid";
+
 // Tools
 @import "tools/placeholders";
 @import "tools/mixins";
 @import "tools/transitions";
 @import "tools/helpers";
+
 // Base
 @import "base/base";
+
 // Layout
 @import "layout/pagewrapper";
 @import "layout/header";
@@ -26,17 +31,10 @@ $output-bourbon-deprecation-warnings: false;
 @import "layout/footer";
 @import "layout/sidebar";
 @import "layout/main";
+
 // Components
 @import "../templates/components/c02-tab/c02-tab";
+
 // Modules
 @import "../templates/modules/m03-demo/m03-demo";
 @import "../templates/modules/m02-accordion/m02-accordion";
-
-
-.prev-m-title {
-  font-size: 19px;
-}
-
-.prev-m-subtitle {
-  font-size: 13px;
-}
