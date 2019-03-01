@@ -1,0 +1,18 @@
+{
+  "outputDir": "dist",
+  "assetsDir": "assets",
+  "preview": {
+    "dir": "preview",
+    "entry": "./preview/app.js",
+    "outputDir": "dist/preview",
+    "outputFile": "preview.js",
+  },
+  "loaders": [
+    "javascript-vue",
+    "style-sass",
+    "html-nunjucks",
+    "assets-sprites",
+    "assets-fonts",
+    "assets-copy"
+  ]
+}

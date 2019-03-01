@@ -2,8 +2,11 @@ const path = require('path');
 const basePath = process.cwd();
 
 const merge = require('webpack-merge');
+
+const darvinConfig = require('../.darvinrc');
 const webpackConfig = require('../webpack.config');
 
+let { webpackEntryObj } = require('./libs/darvin-webpack');
 
 /*** Dynamic Imports START ***/
 const { dev: devServer } = require('./settings/env-devserver');
@@ -21,19 +24,18 @@ const { dev: sprites } = require('./settings/assets-sprites');
 const { dev: vue } = require('./settings/javascript-vue');
 /*** Dynamic Imports END ***/
 
-let { webpackEntryObj } = require('./libs/darvin-webpack');
-
 const settings = {
   entry: webpackEntryObj,
   output: {
     devtoolLineToLine: false,
     // sourceMapFilename: '[name].js.map',
-    path: path.resolve(basePath, 'dist'),
+    path: path.resolve(basePath, darvinConfig.outputDir),
     pathinfo: false,
-    filename: 'assets/[name].js',
+    filename: `${darvinConfig.assetsDir}/[name].js`,
     publicPath: '/'
   },
   devtool: 'cheap-module-eval-source-map'
 };
+
 
 module.exports = merge(webpackConfig, settings, clean, copy, js, css, config, fonts, images, modernizr, nunjucks, vue, sprites, markdown, devServer);

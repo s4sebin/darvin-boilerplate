@@ -3,6 +3,8 @@ const basePath = process.cwd();
 const merge = require('webpack-merge');
 
 const WebpackShellPlugin = require('webpack-shell-plugin-next');
+
+const darvinConfig = require('../.darvinrc');
 const webpackConfig = require('../webpack.config');
 
 /*** Dynamic Imports START ***/
@@ -26,10 +28,10 @@ const settings = {
   entry: webpackEntryObj,
   output: {
     devtoolLineToLine: true,
-    sourceMapFilename: 'assets/[name].js.map',
-    path: path.resolve(basePath, 'dist'),
+    sourceMapFilename: `${darvinConfig.assetsDir}/[name].js.map`,
+    path: path.resolve(basePath, darvinConfig.outputDir),
     pathinfo: false,
-    filename: 'assets/[name].js',
+    filename: `${darvinConfig.assetsDir}/[name].js`,
     chunkFilename: 'async/[name].chunk.js',
     publicPath: '/'
   },

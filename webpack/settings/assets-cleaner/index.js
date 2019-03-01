@@ -1,11 +1,12 @@
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const basePath = process.cwd();
+const darvinConfig = require('../../../.darvinrc');
 
 const prod = {
   plugins: [
-    new CleanWebpackPlugin(['dist'], {
+    new CleanWebpackPlugin([darvinConfig.outputDir], {
       root: basePath,
-      exclude: ['preview'],
+      exclude: [`${darvinConfig.preview.dir}`],
       verbose: true
     }),
   ],
@@ -13,9 +14,9 @@ const prod = {
 
 const dev = {
   plugins: [
-    new CleanWebpackPlugin(['dist'], {
+    new CleanWebpackPlugin([darvinConfig.outputDir], {
       root: basePath,
-      exclude: ['preview'],
+      exclude: [`${darvinConfig.preview.dir}`],
       verbose: true
     }),
   ],
@@ -23,7 +24,7 @@ const dev = {
 
 const prev = {
   plugins: [
-    new CleanWebpackPlugin(['dist/preview'], {
+    new CleanWebpackPlugin([`${darvinConfig.preview.outputDir}`], {
       root: basePath
     }),
   ],

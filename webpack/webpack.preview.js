@@ -2,6 +2,8 @@ const path = require('path');
 const basePath = process.cwd();
 
 const merge = require('webpack-merge');
+
+const darvinConfig = require('../.darvinrc');
 const webpackConfig = require('../webpack.config');
 
 /*** Dynamic Imports START ***/
@@ -14,13 +16,12 @@ const { prev: sprites } = require('./settings/assets-sprites');
 /*** Dynamic Imports END ***/
 
 const settings = {
-  entry: ["./preview/app.js"],
+  entry: [`${darvinConfig.preview.entry}`],
   output: {
     devtoolLineToLine: false,
-    // sourceMapFilename: '[name].js.map',
-    path: path.resolve(basePath, 'dist/preview'),
+    path: path.resolve(basePath, `${darvinConfig.preview.outputDir}`),
     pathinfo: false,
-    filename: 'preview.js',
+    filename: `${darvinConfig.preview.outputFile}`,
     publicPath: '/'
   },
   devtool: 'cheap-module-eval-source-map',
